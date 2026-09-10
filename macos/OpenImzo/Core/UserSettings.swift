@@ -22,6 +22,9 @@ enum UserSettings {
     private static let extraKeyFoldersKey = "extraKeyFolders"
     private static let appLanguageKey = "appLanguage"
     private static let hasCompletedFirstRunKey = "hasCompletedFirstRun"
+    private static let automaticUpdateChecksKey = "automaticUpdateChecks"
+    private static let lastUpdateCheckKey = "lastUpdateCheck"
+    private static let skippedUpdateVersionKey = "skippedUpdateVersion"
 
     /// The bundle identifier this app shipped under before the OpenImzo rename
     /// (`macos/project.yml`, before this task). Read only by `migrateLegacyDefaults()`.
@@ -82,6 +85,34 @@ enum UserSettings {
             _ = migrateLegacyDefaultsOnce
             UserDefaults.standard.set(newValue.rawValue, forKey: appLanguageKey)
         }
+    }
+
+    /// Whether `UpdateChecker` may ask GitHub about new releases without being told to.
+    ///
+    /// Defaults to **on**, and `UserDefaults.bool(forKey:)` returns `false` for a key never
+    /// written — so this reads the object first and only falls back to the default when there is
+    /// genuinely nothing stored. Getting that wrong would silently switch update checking off for
+    /// everyone who has never opened Settings.
+    ///
+    /// On by default because this is a signing client: a copy that quietly goes a year out of
+    /// date is a security problem, not a preference. Off is one toggle away, and the Settings row
+    /// says exactly what a check sends and where, so the choice is an informed one.
+    static var automaticUpdateChecks: Bool {
+        get { UserDefaults.standard.object(forKey: automaticUpdateChecksKey) as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: automaticUpdateChecksKey) }
+    }
+
+    /// When the last check ran, successful or not — it is what rate-limits the automatic ones.
+    static var lastUpdateCheck: Date? {
+        get { UserDefaults.standard.object(forKey: lastUpdateCheckKey) as? Date }
+        set { UserDefaults.standard.set(newValue, forKey: lastUpdateCheckKey) }
+    }
+
+    /// A release the person chose not to be reminded about. Stored as its version text rather
+    /// than a flag, so the next release after it is announced normally.
+    static var skippedUpdateVersion: String? {
+        get { UserDefaults.standard.string(forKey: skippedUpdateVersionKey) }
+        set { UserDefaults.standard.set(newValue, forKey: skippedUpdateVersionKey) }
     }
 
     /// Copies `extraKeyFolders` and `appLanguage` from the previous bundle identifier's

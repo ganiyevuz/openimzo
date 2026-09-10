@@ -12,7 +12,6 @@ struct AboutView: View {
     /// mistake to notice while editing, not a reason to force-unwrap and crash a shipped app in
     /// front of someone: the row for a `nil` address is simply left out below.
     private static let developerURL = URL(string: "https://jakhongir.dev")
-    private static let projectURL = URL(string: "https://github.com/ganiyevuz/openimzo")
 
     private var shortVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -83,10 +82,10 @@ struct AboutView: View {
                         .accessibilityLabel("Developer website, opens in your browser")
                     }
                 }
-                if let projectURL = Self.projectURL {
+                if let projectURL = AppIdentity.repositoryURL {
                     LabeledContent("Project") {
                         Link(destination: projectURL) {
-                            Text(verbatim: "github.com/ganiyevuz/openimzo")
+                            Text(verbatim: AppIdentity.repositoryLabel)
                         }
                         .accessibilityLabel("Project on GitHub, opens in your browser")
                     }

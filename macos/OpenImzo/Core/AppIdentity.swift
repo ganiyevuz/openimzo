@@ -18,4 +18,28 @@ import Foundation
 /// a migration, which is `AppDirectories`' own job, not this one's.
 enum AppIdentity {
     static let productName = "OpenImzo"
+
+    /// Where this app is published. Two literals rather than one address,
+    /// because two different addresses are built from them — the page a person
+    /// visits and the API `UpdateChecker` asks — and a project that moved with
+    /// only one of them updated would either link nowhere or check the wrong
+    /// repository for updates, silently.
+    static let repositoryOwner = "ganiyevuz"
+    static let repositoryName = "openimzo"
+
+    /// `Optional` rather than force-unwrapped, and constructed from fixed
+    /// literals this file owns rather than anything a person types or a server
+    /// sends: `nil` could only ever mean this file itself was edited into an
+    /// invalid address, which is a mistake to notice while editing, not a
+    /// reason to crash a shipped app. Callers leave the row or the check out.
+    static let repositoryURL = URL(string: "https://github.com/\(repositoryOwner)/\(repositoryName)")
+
+    /// The newest published, non-draft, non-prerelease release. GitHub's own
+    /// `/releases/latest` already excludes the other two, so nothing here has
+    /// to filter them out and get that filter wrong.
+    static let latestReleaseEndpoint =
+        URL(string: "https://api.github.com/repos/\(repositoryOwner)/\(repositoryName)/releases/latest")
+
+    /// What the repository looks like written down, for a link's own text.
+    static let repositoryLabel = "github.com/\(repositoryOwner)/\(repositoryName)"
 }

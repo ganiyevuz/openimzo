@@ -19,6 +19,7 @@
 		51DD14EAC0C98C9B0B8237F7 /* AppDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */; };
 		6BFD6378E05B4B94621D51BC /* FirstRunFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D979EB4E333DA1EFA2952F /* FirstRunFlow.swift */; };
 		817E177D3F951BD13D1280F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC28C4A5A4331816850F0A6D /* SettingsView.swift */; };
+		8539B20C06F59565A19B698B /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708D7AB19448F852362FEDB /* UpdateChecker.swift */; };
 		8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE38D338AA8A2760370AED /* TrustInstaller.swift */; };
 		89D6CB4F5E17645B9C9892FB /* NewPfxPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */; };
 		94799042F4F039CF896E595F /* TCPProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DBB6485F82F013FF6064E /* TCPProbe.swift */; };
@@ -29,7 +30,9 @@
 		B813FBFA44C6B818316D2373 /* PermissionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */; };
 		BD736DD8D6D23DE46825778C /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA7A38478BB8FBEB1CCA0AF /* MenuBarContent.swift */; };
 		BEF39CF7B5359C746A4C5E26 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */; };
+		C351576884F2F630A0801D85 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A2DC1DF09C637AB6C73DB7 /* AppVersion.swift */; };
 		C81EDB02B7E6AE2D2D763279 /* OpenImzoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B3BACEE744E2891313F7D2 /* OpenImzoApp.swift */; };
+		CA314DDE6530EDC7242DE2F1 /* UpdateBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294BAA8AF2A1F2D77FEBAEAF /* UpdateBanner.swift */; };
 		DCEEA11EC86C33CC99E0D6B9 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3C4962381609323033F05CE8 /* AppIcon.icns */; };
 		DE4D3869271622D09BC7F691 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9058E89115AAD7C70F49373F /* Localizable.xcstrings */; };
 		E5FB480983822B7359310308 /* AppIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590D2A91A3EDC2D539B4481C /* AppIdentity.swift */; };
@@ -40,8 +43,10 @@
 /* Begin PBXFileReference section */
 		0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacUiDelegate.swift; sourceTree = "<group>"; };
 		14CE38D338AA8A2760370AED /* TrustInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustInstaller.swift; sourceTree = "<group>"; };
+		19A2DC1DF09C637AB6C73DB7 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPfxPanel.swift; sourceTree = "<group>"; };
 		204DBB6485F82F013FF6064E /* TCPProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPProbe.swift; sourceTree = "<group>"; };
+		294BAA8AF2A1F2D77FEBAEAF /* UpdateBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateBanner.swift; sourceTree = "<group>"; };
 		2DBDFF8EAEF5D36691E839AC /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		3883CB300DD91BB7AEC6E336 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreEngine.swift; sourceTree = "<group>"; };
@@ -50,6 +55,7 @@
 		46BD39C98077A45CE20AF06B /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		47EB12B5D3D165FC395957EC /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
 		5383028CE76367D1E12A5F85 /* PasswordPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPanel.swift; sourceTree = "<group>"; };
+		5708D7AB19448F852362FEDB /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 		590D2A91A3EDC2D539B4481C /* AppIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdentity.swift; sourceTree = "<group>"; };
 		6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		6B0F458F419F0CC09C7A1D56 /* EventPump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPump.swift; sourceTree = "<group>"; };
@@ -98,6 +104,7 @@
 				46BD39C98077A45CE20AF06B /* MainWindow.swift */,
 				AC28C4A5A4331816850F0A6D /* SettingsView.swift */,
 				89474E6D1011188D7D76172B /* SitesView.swift */,
+				294BAA8AF2A1F2D77FEBAEAF /* UpdateBanner.swift */,
 			);
 			path = Window;
 			sourceTree = "<group>";
@@ -165,12 +172,14 @@
 				FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */,
 				590D2A91A3EDC2D539B4481C /* AppIdentity.swift */,
 				47EB12B5D3D165FC395957EC /* AppLanguage.swift */,
+				19A2DC1DF09C637AB6C73DB7 /* AppVersion.swift */,
 				3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */,
 				6B0F458F419F0CC09C7A1D56 /* EventPump.swift */,
 				DD0D9764D02497877FB12D49 /* MacPlatform.swift */,
 				0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */,
 				204DBB6485F82F013FF6064E /* TCPProbe.swift */,
 				14CE38D338AA8A2760370AED /* TrustInstaller.swift */,
+				5708D7AB19448F852362FEDB /* UpdateChecker.swift */,
 				3883CB300DD91BB7AEC6E336 /* UserSettings.swift */,
 			);
 			path = Core;
@@ -299,6 +308,7 @@
 				51DD14EAC0C98C9B0B8237F7 /* AppDirectories.swift in Sources */,
 				E5FB480983822B7359310308 /* AppIdentity.swift in Sources */,
 				B16E2965204B9E6D4C93FFB1 /* AppLanguage.swift in Sources */,
+				C351576884F2F630A0801D85 /* AppVersion.swift in Sources */,
 				1CE37C4B388D87AD12FB6FAA /* ConfirmPanels.swift in Sources */,
 				221899A0779CF2F5D6CCE9C6 /* CoreEngine.swift in Sources */,
 				48C0FC687CC6CB41CC3400AF /* EventPump.swift in Sources */,
@@ -317,6 +327,8 @@
 				1F70FBD780E16F85A1114840 /* SitesView.swift in Sources */,
 				94799042F4F039CF896E595F /* TCPProbe.swift in Sources */,
 				8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */,
+				CA314DDE6530EDC7242DE2F1 /* UpdateBanner.swift in Sources */,
+				8539B20C06F59565A19B698B /* UpdateChecker.swift in Sources */,
 				378AEA60FABFF69FB8C5ED68 /* UserSettings.swift in Sources */,
 				AF3DEBC26EF07A3177A24764 /* openimzo.swift in Sources */,
 			);

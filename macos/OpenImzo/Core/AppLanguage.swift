@@ -63,6 +63,14 @@ extension Locale {
     /// .localizedString(forKey:value:table:)` on it resolves correctly — confirmed by checking
     /// that the same bundle, opened the same way, does contain the translation.
     func localizedAppString(_ key: String, _ arguments: CVarArg...) -> String {
+        localizedAppString(key, arguments: arguments)
+    }
+
+    /// The same lookup, taking its arguments as an array. Swift cannot forward one variadic
+    /// parameter to another — the array would arrive as a single argument, and every `%@` after
+    /// the first would render as garbage — so any caller that is itself variadic, or that builds
+    /// its arguments at runtime, has to come through here.
+    func localizedAppString(_ key: String, arguments: [CVarArg]) -> String {
         let code = language.languageCode?.identifier ?? "en"
         let bundle = Bundle.main.path(forResource: code, ofType: "lproj").flatMap(Bundle.init(path:)) ?? .main
         let template = bundle.localizedString(forKey: key, value: nil, table: "Localizable")

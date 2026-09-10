@@ -47,6 +47,12 @@ BUILTIN_IDENTIFIERS = [
     "Text", "Button", "Label", "Toggle", "Section", "ContentUnavailableView",
     "Picker", "SecureField", "TextField", "LabeledContent", "Menu",
     ".navigationTitle", ".accessibilityLabel",
+    # Not a SwiftUI initializer: this app's own `Locale.localizedAppString(_:_:)`
+    # (macos/OpenImzo/Core/AppLanguage.swift), which resolves a catalogue key from imperative
+    # code — `CoreEngine`'s error messages, `MainWindow`'s window title, `UpdateChecker`'s
+    # failure sentences. Its first argument is the key, same shape as the initializers above,
+    # and until it was listed here every string reached that way was unchecked.
+    ".localizedAppString",
 ]
 
 # (type name, labeled parameter) pairs, for this app's own view types whose named parameter is

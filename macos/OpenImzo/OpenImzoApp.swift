@@ -8,6 +8,7 @@ import SwiftUI
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let coreEngine = CoreEngine()
+    let updateChecker = UpdateChecker()
 
     /// Shows `FirstRunFlow` once, the very first time this app is ever launched — a no-op on
     /// every later launch (`UserSettings.hasCompletedFirstRun`). Here rather than anywhere in the
@@ -16,6 +17,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// `MacUiDelegate`'s request panels do, rather than needing a `Scene` of its own.
     func applicationDidFinishLaunching(_ notification: Notification) {
         FirstRunFlow.presentIfNeeded(coreEngine: coreEngine)
+        // Detached from launch rather than awaited: a slow or unreachable GitHub must not hold
+        // up the app starting, and nothing on screen is waiting for the answer.
+        Task { await updateChecker.checkAutomaticallyIfDue() }
     }
 
     /// Quit must not kill the process out from under an open panel (controller addendum #3):
@@ -64,7 +68,7 @@ struct OpenImzoApp: App {
         // is never translated (see `AppIdentity`'s own doc comment) — and it means this is the
         // window scene's title, found the same single-search way as every other occurrence.
         Window(AppIdentity.productName, id: MainWindow.id) {
-            MainWindow(coreEngine: appDelegate.coreEngine)
+            MainWindow(coreEngine: appDelegate.coreEngine, updateChecker: appDelegate.updateChecker)
                 .environment(\.locale, locale)
         }
         .defaultSize(width: 900, height: 560)

@@ -42,6 +42,7 @@ struct MainWindow: View {
     static let id = "main"
 
     var coreEngine: CoreEngine
+    var updateChecker: UpdateChecker
 
     @Environment(\.locale) private var locale
     @State private var selection: MainWindowSection? = .keys
@@ -81,12 +82,24 @@ struct MainWindow: View {
             .focusEffectDisabled()
             .navigationSplitViewColumnWidth(min: 150, ideal: 170, max: 220)
         } detail: {
-            switch selection ?? .keys {
-            case .keys: KeysView(coreEngine: coreEngine)
-            case .sites: SitesView(coreEngine: coreEngine)
-            case .activity: ActivityView(coreEngine: coreEngine)
-            case .settings: SettingsView(coreEngine: coreEngine)
-            case .about: AboutView()
+            // The banner sits inside the detail column, above whichever section is showing,
+            // rather than above the whole split view: a strip spanning the sidebar as well would
+            // push the sidebar down and leave a gap beside the window's own title bar.
+            VStack(spacing: 0) {
+                if let update = updateChecker.pendingUpdate {
+                    UpdateBanner(
+                        version: update.version,
+                        page: update.page,
+                        onSkip: { updateChecker.skipPendingVersion() }
+                    )
+                }
+                switch selection ?? .keys {
+                case .keys: KeysView(coreEngine: coreEngine)
+                case .sites: SitesView(coreEngine: coreEngine)
+                case .activity: ActivityView(coreEngine: coreEngine)
+                case .settings: SettingsView(coreEngine: coreEngine, updateChecker: updateChecker)
+                case .about: AboutView()
+                }
             }
         }
         .frame(minWidth: 760, minHeight: 460)
@@ -100,6 +113,11 @@ struct MainWindow: View {
         // receives the correct text outright, regardless of which lookup path sets it.
         .navigationTitle(resolvedTitle(for: selection ?? .keys))
         .onAppear { sidebarFocused = true }
+        // Where the automatic check actually happens. This is a menu-bar app that spends most of
+        // its life with no window open, so the moment a window opens is both the first moment a
+        // banner could be seen and a moment a person is already waiting on the app — see
+        // `UpdateChecker.checkAutomaticallyIfDue()` for why there is no timer.
+        .task { await updateChecker.checkAutomaticallyIfDue() }
         .onChange(of: coreEngine.pendingKeySelection) { _, newValue in
             // The menu bar's Keys submenu sets this just before opening this window, wanting a
             // specific key selected rather than just landing on the list — see

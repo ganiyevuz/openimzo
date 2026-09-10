@@ -75,7 +75,9 @@ private struct PortStatusRow: View {
 /// went wrong, with a retry, rather than showing the same problem triangle every time.
 struct SettingsView: View {
     var coreEngine: CoreEngine
+    var updateChecker: UpdateChecker
 
+    @Environment(\.locale) private var locale
     @State private var isInstallingTrust = false
 
     var body: some View {
@@ -165,6 +167,8 @@ struct SettingsView: View {
                 Section("Activity") {
                     Toggle("Keep Activity Log Across Launches", isOn: toggleBinding(settings, \.keepActivityLog))
                 }
+
+                updatesSection
             } else {
                 Section {
                     HStack {
@@ -178,6 +182,72 @@ struct SettingsView: View {
         // No `.navigationTitle` here: `MainWindow` sets the window's title bar itself, for all
         // five sections in one place — see its own doc comment for why.
         .task { await coreEngine.refreshSettings() }
+    }
+
+    /// Update management: whether to check on its own, a button to check now, and what the last
+    /// check found.
+    ///
+    /// The line about what a check sends is not decoration. This app asks people to trust it with
+    /// their signing key; a feature that quietly makes a network request to a third party has to
+    /// say so where the switch for it is, not in a policy document nobody opens.
+    @ViewBuilder private var updatesSection: some View {
+        Section("Updates") {
+            Toggle("Check for Updates Automatically", isOn: Binding(
+                get: { updateChecker.automaticChecks },
+                set: { updateChecker.automaticChecks = $0 }
+            ))
+            Text("Asks GitHub once a day whether a newer release exists. It sends nothing about you or your keys — but, like opening any web page, it does tell GitHub this computer's address.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack {
+                Text(lastCheckDescription)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button(updateChecker.isChecking ? "Checking…" : "Check Now") {
+                    Task { await updateChecker.checkNow() }
+                }
+                .disabled(updateChecker.isChecking)
+            }
+
+            switch updateChecker.outcome {
+            case .notCheckedYet:
+                EmptyView()
+            case .upToDate:
+                Label("This is the newest release.", systemImage: "checkmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.green)
+            case let .updateAvailable(version, page):
+                HStack {
+                    Label("Version \(String(version)) is available.", systemImage: "arrow.down.circle.fill")
+                        .font(.caption)
+                    Spacer()
+                    Link("Open Release Page", destination: page)
+                        .font(.caption)
+                }
+            case let .failed(reason):
+                // `Text(verbatim:)`: the reason is already a resolved sentence in the app's own
+                // language (or the system's, for a URLSession error), never a catalogue key.
+                Label { Text(verbatim: reason) } icon: { Image(systemName: "exclamationmark.triangle.fill") }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// "Never checked." or "Last checked <when>", in the app's language rather than the system's
+    /// — which is why the date goes through `Locale.localizedAppString(_:_:)` with an explicitly
+    /// localized date string rather than a plain `Text(date, style:)`.
+    private var lastCheckDescription: String {
+        guard let lastChecked = updateChecker.lastChecked else {
+            return locale.localizedAppString("Never checked.")
+        }
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return locale.localizedAppString("Last checked %@", formatter.string(from: lastChecked))
     }
 
     private func toggleBinding(_ settings: Settings, _ keyPath: WritableKeyPath<Settings, Bool>) -> Binding<Bool> {
