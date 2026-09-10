@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>OpenImzo — API · {0}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="favicon.ico" sizes="any">
+        <link rel="icon" href="icon.png" type="image/png">
+        <script src="e-imzo.js"></script>
+        <style>
+            :root {
+                color-scheme: light dark;
+                --bg: #f2f3f5;
+                --surface: #ffffff;
+                --border: #e1e4e8;
+                --text: #1c2024;
+                --muted: #6b7280;
+                --accent: #2f6fed;
+                --pill-bg: #eef2ff;
+                --code-bg: #f6f8fa;
+                --code-border: #e1e4e8;
+                --tok-kw: #d73a49;
+                --tok-obj: #6f42c1;
+                --tok-fn: #005cc5;
+                --tok-prop: #22863a;
+                --tok-str: #032f62;
+                --tok-comment: #6a737d;
+                --tok-ident: #24292e;
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --bg: #16181d;
+                    --surface: #1e2126;
+                    --border: #2c3038;
+                    --text: #e8eaed;
+                    --muted: #9aa1ac;
+                    --accent: #7aa2ff;
+                    --pill-bg: #262b3a;
+                    --code-bg: #22262e;
+                    --code-border: #2c3038;
+                    --tok-kw: #c678dd;
+                    --tok-obj: #61afef;
+                    --tok-fn: #56b6c2;
+                    --tok-prop: #e5c07b;
+                    --tok-str: #98c379;
+                    --tok-comment: #7f848e;
+                    --tok-ident: #abb2bf;
+                }
+            }
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: var(--bg);
+                color: var(--text);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                line-height: 1.55;
+            }
+            a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .topbar {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 20px 24px;
+                background: var(--surface);
+                border-bottom: 1px solid var(--border);
+            }
+            .topbar img {
+                display: block;
+                height: 30px;
+                width: auto;
+            }
+            .topbar h1 {
+                font-size: 1.05rem;
+                font-weight: 600;
+                margin: 0 0 4px;
+            }
+            .version {
+                display: inline-block;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 0.75rem;
+                padding: 2px 10px;
+                border-radius: 999px;
+                background: var(--pill-bg);
+                color: var(--accent);
+            }
+            .layout {
+                display: grid;
+                grid-template-columns: 240px minmax(0, 1fr);
+                gap: 0;
+                max-width: 1080px;
+                margin: 0 auto;
+                align-items: start;
+            }
+            .toc {
+                position: sticky;
+                top: 0;
+                max-height: 100vh;
+                overflow-y: auto;
+                padding: 24px 16px;
+            }
+            .toc-title {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                color: var(--muted);
+                margin: 0 0 10px;
+            }
+            .toc-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 0.85rem;
+            }
+            .toc-list li {
+                margin-bottom: 4px;
+            }
+            .toc-list a {
+                color: var(--text);
+                display: block;
+                padding: 4px 8px;
+                border-radius: 6px;
+            }
+            .toc-list a:hover {
+                background: var(--pill-bg);
+                text-decoration: none;
+            }
+            main {
+                min-width: 0;
+                padding: 24px 24px 64px;
+            }
+            .plugin {
+                padding-top: 28px;
+                margin-top: 28px;
+                border-top: 1px solid var(--border);
+            }
+            .plugin:first-child {
+                padding-top: 0;
+                margin-top: 0;
+                border-top: none;
+            }
+            .plugin h2 {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 1.15rem;
+                margin: 0 0 6px;
+            }
+            .plugin-desc {
+                color: var(--muted);
+                margin: 0 0 20px;
+            }
+            .func {
+                margin: 0 0 24px;
+                padding: 16px 18px;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+            }
+            .func-name {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 0.95rem;
+                margin: 0 0 6px;
+            }
+            .func-desc {
+                margin: 0 0 12px;
+                font-size: 0.92rem;
+            }
+            dl.args {
+                margin: 0 0 14px;
+                font-size: 0.85rem;
+            }
+            dl.args dt {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-weight: 600;
+                margin-top: 6px;
+            }
+            dl.args dd {
+                margin: 2px 0 0 0;
+                color: var(--muted);
+            }
+            .code-wrap {
+                position: relative;
+            }
+            .code-block {
+                margin: 0;
+                padding: 14px 16px;
+                background: var(--code-bg);
+                border: 1px solid var(--code-border);
+                border-radius: 8px;
+                overflow-x: auto;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 0.82rem;
+            }
+            .copy-btn {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                font: inherit;
+                font-size: 0.72rem;
+                padding: 4px 10px;
+                border-radius: 6px;
+                border: 1px solid var(--code-border);
+                background: var(--surface);
+                color: var(--muted);
+                cursor: pointer;
+            }
+            .copy-btn:hover {
+                color: var(--text);
+            }
+            .tok-kw { color: var(--tok-kw); }
+            .tok-obj { color: var(--tok-obj); }
+            .tok-fn { color: var(--tok-fn); }
+            .tok-prop { color: var(--tok-prop); }
+            .tok-str { color: var(--tok-str); }
+            .tok-comment { color: var(--tok-comment); font-style: italic; }
+            .tok-ident { color: var(--tok-ident); }
+            .error {
+                color: #d73a49;
+            }
+            @media (max-width: 760px) {
+                .layout {
+                    display: block;
+                }
+                .toc {
+                    position: static;
+                    max-height: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header class="topbar">
+            <a href="http://e-imzo.uz/"><img src="e-imzo-logo.png" alt="E-IMZO"></a>
+            <div>
+                <h1>API-документация для разработчиков</h1>
+                <span class="version">{0}</span>
+            </div>
+        </header>
+        <div class="layout">
+            <nav class="toc" aria-label="Contents">
+                <p class="toc-title">Содержание</p>
+                <div id="tocList">Загрузка…</div>
+            </nav>
+            <main id="content">
+                <p id="status">Загрузка документации…</p>
+            </main>
+        </div>
+        <script>
+            (function () {
+                function el(tag, cls, text) {
+                    var e = document.createElement(tag);
+                    if (cls) e.className = cls;
+                    if (text !== undefined) e.textContent = text;
+                    return e;
+                }
+
+                function buildExampleCall(plugin, func) {
+                    var code = el('code');
+                    function tok(cls, text) { code.appendChild(el('span', 'tok-' + cls, text)); }
+                    function raw(text) { code.appendChild(document.createTextNode(text)); }
+
+                    tok('obj', 'CAPIWS'); raw('.'); tok('fn', 'callFunction'); raw('({\n');
+                    raw('  '); tok('prop', 'plugin'); raw(': '); tok('str', '"' + plugin.name + '"'); raw(',\n');
+                    raw('  '); tok('prop', 'name'); raw('   : '); tok('str', '"' + func.name + '"');
+
+                    if (func.arguments && func.arguments.length) {
+                        raw(',\n  '); tok('prop', 'arguments'); raw(': [\n');
+                        func.arguments.forEach(function (arg, i) {
+                            raw('    '); tok('comment', '// ' + arg.description); raw('\n    ');
+                            tok('ident', arg.name);
+                            raw(i < func.arguments.length - 1 ? ',\n' : '\n');
+                        });
+                        raw('  ]');
+                    }
+
+                    raw('\n},\n'); tok('kw', 'function'); raw('(event, data) {\n  ');
+                    tok('obj', 'console'); raw('.'); tok('fn', 'log'); raw('(data);\n}, ');
+                    tok('kw', 'function'); raw('(error) {\n  ');
+                    tok('obj', 'window'); raw('.'); tok('fn', 'alert'); raw('(error);\n});');
+
+                    var pre = el('pre', 'code-block');
+                    pre.appendChild(code);
+
+                    var copyBtn = el('button', 'copy-btn', 'Копировать');
+                    copyBtn.type = 'button';
+                    copyBtn.addEventListener('click', function () {
+                        var text = code.textContent;
+                        var done = function () {
+                            copyBtn.textContent = 'Скопировано';
+                            setTimeout(function () { copyBtn.textContent = 'Копировать'; }, 1500);
+                        };
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(text).then(done, done);
+                        } else {
+                            var ta = document.createElement('textarea');
+                            ta.value = text;
+                            ta.style.position = 'fixed';
+                            ta.style.opacity = '0';
+                            document.body.appendChild(ta);
+                            ta.select();
+                            try { document.execCommand('copy'); } catch (e) { /* clipboard unavailable */ }
+                            document.body.removeChild(ta);
+                            done();
+                        }
+                    });
+
+                    var wrap = el('div', 'code-wrap');
+                    wrap.appendChild(pre);
+                    wrap.appendChild(copyBtn);
+                    return wrap;
+                }
+
+                function renderDoc(plugins) {
+                    var tocList = document.getElementById('tocList');
+                    var content = document.getElementById('content');
+                    tocList.innerHTML = '';
+                    content.innerHTML = '';
+
+                    var tocUl = el('ul', 'toc-list');
+
+                    plugins.forEach(function (plugin) {
+                        var tocLi = el('li');
+                        var tocA = el('a', null, plugin.name);
+                        tocA.href = '#plugin-' + plugin.name;
+                        tocLi.appendChild(tocA);
+                        tocUl.appendChild(tocLi);
+
+                        var section = el('section', 'plugin');
+                        section.id = 'plugin-' + plugin.name;
+                        section.appendChild(el('h2', null, plugin.name));
+                        section.appendChild(el('p', 'plugin-desc', plugin.description));
+
+                        (plugin.functions || []).forEach(function (func) {
+                            var fsec = el('article', 'func');
+                            fsec.id = 'plugin-' + plugin.name + '-' + func.name;
+                            fsec.appendChild(el('h3', 'func-name', func.name));
+                            fsec.appendChild(el('p', 'func-desc', func.description));
+
+                            if (func.arguments && func.arguments.length) {
+                                var argsList = el('dl', 'args');
+                                func.arguments.forEach(function (arg) {
+                                    argsList.appendChild(el('dt', null, arg.name + (arg.optional ? ' (необязательный)' : '')));
+                                    argsList.appendChild(el('dd', null, arg.description));
+                                });
+                                fsec.appendChild(argsList);
+                            }
+
+                            fsec.appendChild(buildExampleCall(plugin, func));
+                            section.appendChild(fsec);
+                        });
+
+                        content.appendChild(section);
+                    });
+
+                    tocList.appendChild(tocUl);
+                }
+
+                function fail(reason) {
+                    var content = document.getElementById('content');
+                    content.innerHTML = '';
+                    content.appendChild(el('p', 'error', 'Не удалось загрузить документацию: ' + reason));
+                }
+
+                window.addEventListener('load', function () {
+                    CAPIWS.apikey([
+                        'localhost', '96D0C1491615C82B9A54D9989779DF825B690748224C2B04F500F370D51827CE2644D8D4A82C18184D73AB8530BB8ED537269603F61DB0D03D2104ABF789970B',
+                        '127.0.0.1', 'A7BCFA5D490B351BE0754130DF03A068F855DB4333D43921125B9CF2670EF6A40370C646B90401955E1F7BC9CDBF59CE0B2C5467D820BE189C845D0B79CFC96F',
+                        'null', 'E0A205EC4E7B78BBB56AFF83A733A1BB9FD39D562E67978CC5E7D73B0951DB1954595A20672A63332535E13CC6EC1E1FC8857BB09E0855D7E76E411B6FA16E9D'
+                    ], function (event, data) {
+                        if (data.success) {
+                            CAPIWS.apidoc(function (event, data) {
+                                renderDoc(data);
+                            }, function (e) {
+                                fail(e);
+                            });
+                        } else {
+                            fail(data.reason);
+                        }
+                    }, function (e) {
+                        fail(e);
+                    });
+                });
+            })();
+        </script>
+    </body>
+</html>

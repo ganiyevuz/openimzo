@@ -1,0 +1,774 @@
+[
+  {
+    "name": "app",
+    "description": "E-IMZO ilova sozlamalari bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "app",
+        "name": "get_jvm_version",
+        "description": "Информацио о версии JVM",
+        "arguments": []
+      },
+      {
+        "plugin": "app",
+        "name": "change_ui_lang",
+        "description": "Изменить язык интерфейса (не сохраняя в настройках)",
+        "arguments": [
+          {
+            "name": "lang",
+            "optional": false,
+            "description": "Код языка (uz,ru)"
+          }
+        ]
+      },
+      {
+        "plugin": "app",
+        "name": "show_menu",
+        "description": "Отобразить окно с меню E-IMZO",
+        "arguments": []
+      }
+    ]
+  },
+  {
+    "name": "pfx",
+    "description": "PFX formatidagi kalitlar ombori fayllari bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "pfx",
+        "name": "change_password",
+        "description": "Изменить пароль хранилища ключей",
+        "arguments": [
+          {
+            "name": "pfxId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "load_key",
+        "description": "Загрузить ключ и получить идентификатор ключа. Ключ будет доступен определенное время",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "description": "Путь (должна быть пустой или 'DSKEYS')"
+          },
+          {
+            "name": "name",
+            "optional": false,
+            "description": "Имя файла без расширения"
+          },
+          {
+            "name": "alias",
+            "optional": false,
+            "description": "Алиас ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "unload_key",
+        "description": "Удалить загруженные ключи по идентификатору",
+        "arguments": [
+          {
+            "name": "pfxId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "list_disks",
+        "description": "Получить список дисков",
+        "arguments": []
+      },
+      {
+        "plugin": "pfx",
+        "name": "save_temporary_pfx",
+        "description": "Сохранить ключевую пару и самоподписанный сертификат во временный файл формата PFX",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "description": "Путь (должна быть пустой или 'DSKEYS')"
+          },
+          {
+            "name": "name",
+            "optional": false,
+            "description": "Имя файла без расширения"
+          },
+          {
+            "name": "alias",
+            "optional": false,
+            "description": "Алиас ключа"
+          },
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификатор новой ключевой пары"
+          },
+          {
+            "name": "password",
+            "optional": false,
+            "description": "Пароль для временного ключа"
+          },
+          {
+            "name": "subject_x500_name",
+            "optional": false,
+            "description": "Имя субъекта в формате X.500"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "list_certificates",
+        "description": "Получить список сертификатов пользователя",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "save_pfx",
+        "description": "Сохранить ключевую пару или существующий ключ и новые сертификаты в новый файл формата PFX",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "description": "Путь (должна быть пустой или 'DSKEYS')"
+          },
+          {
+            "name": "name",
+            "optional": false,
+            "description": "Имя файла без расширения"
+          },
+          {
+            "name": "alias",
+            "optional": false,
+            "description": "Алиас ключа"
+          },
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификатор новой ключевой пары или существующего хранилища ключей (для обновления сертификатов)"
+          },
+          {
+            "name": "new_key_password",
+            "optional": false,
+            "description": "Пароль для нового ключа"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "verify_password",
+        "description": "Проверить пароль хранилища ключей",
+        "arguments": [
+          {
+            "name": "pfxId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "pfx",
+        "name": "list_all_certificates",
+        "description": "Получить список всех сертификатов пользователя",
+        "arguments": []
+      }
+    ]
+  },
+  {
+    "name": "pki",
+    "description": "OKI bilan o‘zaro ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "pki",
+        "name": "enroll_pfx_step2",
+        "description": "Шаг №2 для получения ключа PFX",
+        "arguments": [
+          {
+            "name": "guid",
+            "optional": false,
+            "description": "Идентификатор процесса GUID (полученный из Шага №1)"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          },
+          {
+            "name": "data_64",
+            "optional": false,
+            "description": "Данные в кодировке BASE64 (будут предваритьльно декодированы, подписаны и вложены в документ)"
+          }
+        ]
+      },
+      {
+        "plugin": "pki",
+        "name": "enroll_pfx_step1",
+        "description": "Шаг №1 для получения ключа PFX",
+        "arguments": [
+          {
+            "name": "guid",
+            "optional": false,
+            "description": "Идентификатор процесса GUID"
+          },
+          {
+            "name": "alg_name",
+            "optional": false,
+            "description": "Название алгоритма"
+          },
+          {
+            "name": "seed",
+            "optional": false,
+            "description": "Случайные данные для инициализации генератора случайных чисел"
+          },
+          {
+            "name": "subject_x500_name",
+            "optional": false,
+            "description": "Имя субъекта в формате X.500"
+          },
+          {
+            "name": "cp_list",
+            "optional": false,
+            "description": "OIDы политик применения сертификатов разделенных запятой"
+          },
+          {
+            "name": "file_name",
+            "optional": false,
+            "description": "Имя файла без расширения (если тип носителя ключа - файл)"
+          },
+          {
+            "name": "data_64",
+            "optional": false,
+            "description": "Данные в кодировке BASE64 (будут предваритьльно декодированы, подписаны и вложены в документ)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "pkcs7",
+    "description": "PKCS#7/CMS formati bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "pkcs7",
+        "name": "create_pkcs7",
+        "description": "Создать PKCS#7/CMS документ подписав ключем задаваемым идентификатором",
+        "arguments": [
+          {
+            "name": "data_64",
+            "optional": false,
+            "description": "Данные в кодировке BASE64 (будут предваритьльно декодированы, подписаны и вложены в документ)"
+          },
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификатор ключа подписывающего лица (полученный из фукнции других плагинов)"
+          },
+          {
+            "name": "detached",
+            "optional": true,
+            "description": "Возможные значения: 'yes' - будет создан PKCS#7/CMS документ без вложения исходных данных, 'no' или '' - будет создан PKCS#7/CMS документ с вложением исходных данных"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "x509",
+    "description": "X.509 sertifikatlari bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "x509",
+        "name": "get_certificate_chain",
+        "description": "Получить цепочку сертификатов в кодировке BASE64 по идентификатору ключа",
+        "arguments": [
+          {
+            "name": "certId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "x509",
+        "name": "get_certificate_info",
+        "description": "Получить информацию о сертификате",
+        "arguments": [
+          {
+            "name": "certificate_64",
+            "optional": false,
+            "description": "Сертификат в кодировке BASE64"
+          }
+        ]
+      },
+      {
+        "plugin": "x509",
+        "name": "verify_certificate",
+        "description": "Верификация подписи сертификата субъектка сертификатом издателя",
+        "arguments": [
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "issuer_certificate_64",
+            "optional": false,
+            "description": "Сертификат издателя в кодировке BASE64"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "baikey",
+    "description": "BAIK-token bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "baikey",
+        "name": "clear_saved_pin_codes",
+        "description": "Стереть сохраненые PIN-коды",
+        "arguments": []
+      },
+      {
+        "plugin": "baikey",
+        "name": "list_tokens",
+        "description": "Получить список BAIK-Token ов",
+        "arguments": []
+      },
+      {
+        "plugin": "baikey",
+        "name": "personalize",
+        "description": "Персонализировать BAIK-Token записав новые сертификаты и установив PIN-код",
+        "arguments": [
+          {
+            "name": "pincode",
+            "optional": false,
+            "description": "PIN-код"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "idcard",
+    "description": "E-IMZO ID-karta bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "idcard",
+        "name": "clear_saved_pin_codes",
+        "description": "Стереть сохраненые PIN-коды",
+        "arguments": []
+      },
+      {
+        "plugin": "idcard",
+        "name": "list_readers",
+        "description": "Получить список считывателей",
+        "arguments": []
+      },
+      {
+        "plugin": "idcard",
+        "name": "get_encrypted_signed_cplc",
+        "description": "Получить зашифрованный и подписанный заводской номер USB-токена",
+        "arguments": [
+          {
+            "name": "nonce",
+            "optional": false,
+            "description": "Значение NONCE"
+          }
+        ]
+      },
+      {
+        "plugin": "idcard",
+        "name": "personalize",
+        "description": "Персонализировать ID-карту записав новые сертификаты и установив PIN-код",
+        "arguments": [
+          {
+            "name": "pincode",
+            "optional": false,
+            "description": "PIN-код"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ckc",
+    "description": "Kripto kalit konteynerlari bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "ckc",
+        "name": "supported_ckc",
+        "description": "Получить список типов поддерживаемых Крипто Контейнеров Ключа",
+        "arguments": []
+      },
+      {
+        "plugin": "ckc",
+        "name": "list_ckc",
+        "description": "Получить список Крипто Контейнеров Ключа",
+        "arguments": []
+      },
+      {
+        "plugin": "ckc",
+        "name": "clear_saved_pin_codes",
+        "description": "Стереть сохраненые PIN-коды",
+        "arguments": []
+      }
+    ]
+  },
+  {
+    "name": "pkcs10",
+    "description": "Kalit juftligini yaratish va PKCS#10 formatidagi sertifikat so‘rovini shakllantirish uchun plagin",
+    "functions": [
+      {
+        "plugin": "pkcs10",
+        "name": "create_pkcs10_from_key",
+        "description": "Формировать запрос на сертификат формата PKCS#10 из существующего ключа",
+        "arguments": [
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификато ключа"
+          },
+          {
+            "name": "replacement_x500_name",
+            "optional": true,
+            "description": "Имя субъекта в формате X.500 или '' если нужно получить имя из сертификата по идентификатору ключа"
+          },
+          {
+            "name": "cp_list",
+            "optional": true,
+            "description": "OIDы политик применения сертификатов разделенных запятой"
+          }
+        ]
+      },
+      {
+        "plugin": "pkcs10",
+        "name": "get_pkcs10_info",
+        "description": "Получить информацию о запросе PKCS#10",
+        "arguments": [
+          {
+            "name": "pkcs10",
+            "optional": false,
+            "description": "Сертификат в кодировке BASE64 или PEM"
+          }
+        ]
+      },
+      {
+        "plugin": "pkcs10",
+        "name": "create_pkcs10",
+        "description": "Формировать запрос на сертификат формата PKCS#10",
+        "arguments": [
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификатор ключевой пары"
+          },
+          {
+            "name": "subject_x500_name",
+            "optional": false,
+            "description": "Имя субъекта в формате X.500"
+          },
+          {
+            "name": "cp_list",
+            "optional": true,
+            "description": "OIDы политик применения сертификатов разделенных запятой"
+          }
+        ]
+      },
+      {
+        "plugin": "pkcs10",
+        "name": "generate_keypair",
+        "description": "Сгенерировать ключевую пару",
+        "arguments": [
+          {
+            "name": "alg_name",
+            "optional": false,
+            "description": "Название алгоритма"
+          },
+          {
+            "name": "seed",
+            "optional": true,
+            "description": "Случайные данные для инициализации генератора случайных чисел"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ytks",
+    "description": "YTKS formatidagi kalitlar ombori fayllari bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "ytks",
+        "name": "change_password",
+        "description": "Изменить пароль хранилища ключей",
+        "arguments": [
+          {
+            "name": "ytksId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "load_key",
+        "description": "Загрузить ключ и получить идентификатор ключа. Ключ будет доступен определенное время",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "description": "Путь (должна быть пустой или 'DSKEYS')"
+          },
+          {
+            "name": "name",
+            "optional": false,
+            "description": "Имя файла без расширения"
+          },
+          {
+            "name": "alias",
+            "optional": false,
+            "description": "Алиас ключа"
+          },
+          {
+            "name": "serialNumber",
+            "optional": false,
+            "description": "Серийный номер сертификата (HEX)"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "unload_key",
+        "description": "Удалить загруженные ключи по идентификатору",
+        "arguments": [
+          {
+            "name": "ytksId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "list_disks",
+        "description": "Получить список дисков",
+        "arguments": []
+      },
+      {
+        "plugin": "ytks",
+        "name": "save_ytks",
+        "description": "Сохранить ключевую пару или существующий ключ и новые сертификаты в новый файл формата YTKS",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "description": "Путь (должна быть пустой или 'DSKEYS')"
+          },
+          {
+            "name": "name",
+            "optional": false,
+            "description": "Имя файла без расширения"
+          },
+          {
+            "name": "alias",
+            "optional": false,
+            "description": "Алиас ключа"
+          },
+          {
+            "name": "id",
+            "optional": false,
+            "description": "Идентификатор новой ключевой пары или существующего хранилища ключей (для обновления сертификатов)"
+          },
+          {
+            "name": "new_key_password",
+            "optional": false,
+            "description": "Пароль для нового ключа"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "list_certificates",
+        "description": "Получить список сертификатов пользователя",
+        "arguments": [
+          {
+            "name": "disk",
+            "optional": false,
+            "description": "Диск"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "verify_password",
+        "description": "Проверить пароль хранилища ключей",
+        "arguments": [
+          {
+            "name": "ytksId",
+            "optional": false,
+            "description": "Идентификатор ключа"
+          }
+        ]
+      },
+      {
+        "plugin": "ytks",
+        "name": "list_all_certificates",
+        "description": "Получить список всех сертификатов пользователя",
+        "arguments": []
+      }
+    ]
+  },
+  {
+    "name": "uzgrd",
+    "description": "UZGUARD-token bilan ishlash uchun plagin",
+    "functions": [
+      {
+        "plugin": "uzgrd",
+        "name": "clear_saved_pin_codes",
+        "description": "Стереть сохраненые PIN-коды",
+        "arguments": []
+      },
+      {
+        "plugin": "uzgrd",
+        "name": "list_tokens",
+        "description": "Получить список UZGUARD-Token ов",
+        "arguments": []
+      },
+      {
+        "plugin": "uzgrd",
+        "name": "personalize",
+        "description": "Персонализировать UZGUARD-Token записав новые сертификаты и установив PIN-код",
+        "arguments": [
+          {
+            "name": "pincode",
+            "optional": false,
+            "description": "PIN-код"
+          },
+          {
+            "name": "subject_certificate_64",
+            "optional": false,
+            "description": "Сертификат субъекта в кодировке BASE64"
+          },
+          {
+            "name": "ca_certificate_64",
+            "optional": false,
+            "description": "Сертификат Центра Регистрации в кодировке BASE64"
+          },
+          {
+            "name": "root_certificate_64",
+            "optional": false,
+            "description": "Корневой сертификат в кодировке BASE64"
+          }
+        ]
+      }
+    ]
+  }
+]

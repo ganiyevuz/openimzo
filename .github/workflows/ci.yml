@@ -1,0 +1,92 @@
+# Builds and checks every push and pull request.
+#
+# Deliberately NOT the same thing as release.yml. That workflow produces the
+# reproducible artifact and therefore enforces .xcode-version exactly, because a
+# different Xcode yields a different — but untampered — hash. This one just
+# answers "does the current tree build and pass its checks", so it uses whatever
+# Xcode the runner image ships and does not enforce the pin.
+#
+# The project has no unit-test suite by design; see CONTRIBUTING.md. What stands
+# in for one is the crypto self-test (40 checks, including RFC 7091 known-answer
+# vectors), which runs here.
+#
+# Uses only actions/checkout, a first-party GitHub action. No third-party action
+# is used, including a build cache: this project asks people to trust what it
+# builds, so its CI does not run code from an author nobody here has vetted, and
+# a slower job is a cheap price for one less thing in the supply chain.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # A newer push to the same branch makes an in-flight run pointless.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    name: Rust — clippy, build, self-test
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+
+      # rust-toolchain.toml pins the exact version, so rustup provisions it
+      # automatically on first use — no toolchain action needed, and no chance
+      # of CI silently testing a different compiler than a contributor's.
+      - name: Show the pinned toolchain
+        run: |
+          rustup show active-toolchain
+          cargo --version
+
+      - name: Clippy (warnings are errors)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Build
+        run: cargo build --workspace --release
+
+      # The power-on self-test is this project's substitute for a unit-test
+      # suite: GOST hash, cipher and signature primitives checked against known
+      # answers before anything else is trusted.
+      - name: Crypto self-test
+        run: cargo run --release -p eimzo-cli -- selftest
+
+  app:
+    name: macOS app — clean build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+
+      # The app target's own build phase runs scripts/build-core.sh, which
+      # compiles the Rust core for both architectures and generates the Swift
+      # bindings — so this step exercises the whole chain a contributor gets
+      # when they open the project and press Build.
+      - name: Build (Debug)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project macos/OpenImzo.xcodeproj \
+            -scheme OpenImzo \
+            -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/dd" \
+            build 2>&1 | tee "$RUNNER_TEMP/build.log"
+
+      # A missing catalogue entry is invisible to the compiler: the build
+      # succeeds and the string silently renders in English for every language.
+      # This is the only thing that catches it.
+      - name: Localization completeness
+        run: python3 scripts/check-localization.py
+
+      - name: Fail on any compiler warning
+        run: |
+          if grep -E "^/.*warning: " "$RUNNER_TEMP/build.log" | grep -v "AppIntents"; then
+            echo "::error::the build produced warnings (listed above); this project builds clean" >&2
+            exit 1
+          fi
+          echo "no compiler warnings"

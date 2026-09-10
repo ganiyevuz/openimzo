@@ -1,0 +1,88 @@
+name: OpenImzo
+options:
+  # No project domain is registered yet, so this deliberately borrows GitHub's own
+  # `io.github.<account>` reverse-DNS convention rather than presuming an organisation
+  # that doesn't exist: `ganiyevuz` is the account this repository is published under.
+  bundleIdPrefix: io.github.ganiyevuz
+  deploymentTarget:
+    macOS: "14.0"
+settings:
+  base:
+    # The Swift *toolchain* here is 6.4 either way (Xcode 27 beta); this pins the
+    # target's *language mode* to 5, not 6. Swift 6 language mode's strict
+    # concurrency checking rejects uniffi 0.28's own generated bindings
+    # (macos/Generated/eimzo.swift) as written -- e.g. its global handle-map
+    # caches aren't Sendable-annotated -- and that file is regenerated fresh by
+    # scripts/build-core.sh on every build, so it cannot be patched here even
+    # temporarily. Swift 5 mode still runs on the same 6.4 compiler.
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    GENERATE_INFOPLIST_FILE: NO
+    ENABLE_HARDENED_RUNTIME: YES
+targets:
+  OpenImzo:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: OpenImzo
+        excludes:
+          - "Info.plist"
+      - path: Generated/eimzo.swift
+        name: eimzo.swift
+    settings:
+      base:
+        PRODUCT_NAME: "OpenImzo"
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.ganiyevuz.openimzo
+        INFOPLIST_FILE: OpenImzo/Info.plist
+        # YES (Xcode's own default for a project using a String Catalog): lets the build extract
+        # every `LocalizedStringKey`/`String(localized:)` use so Xcode can cross-check it against
+        # `Localizable.xcstrings` and flag a used-but-missing or catalogued-but-unused key. With
+        # this off, as it was, `Localizable.xcstrings` was entirely hand-authored with no
+        # build-time check at all — a missing key was invisible until a person actually read that
+        # screen in that language, which is exactly how four of them got missed in this task's
+        # first pass.
+        SWIFT_EMIT_LOC_STRINGS: YES
+        CODE_SIGN_STYLE: Automatic
+    dependencies:
+      # A plain .framework, not an .xcframework: the two architectures are
+      # already merged by `lipo` before this is assembled (see
+      # scripts/build-core.sh), so there is only ever one macOS slice and an
+      # xcframework's per-platform-variant indirection buys nothing. It buys
+      # a real cost instead -- Xcode resolves an .xcframework's variant
+      # during build-plan creation, before any build phase (including the
+      # prebuild script that generates this one) has run, so a fresh clone
+      # failed with "There is no XCFramework found" before the framework
+      # could ever be built. A plain .framework carries no such preflight:
+      # Xcode only needs it to exist once the link step actually runs, which
+      # is after the prebuild script phase below has already created it.
+      #
+      # Named `eimzoFFI`, matching the module UniFFI's generated Swift binds
+      # to (`import eimzoFFI` in macos/Generated/eimzo.swift): Clang resolves
+      # `import <Name>` for a framework by looking for `<Name>.framework`
+      # directly, then reading whatever module its module map declares --
+      # the framework's own directory name has to match the import, the
+      # module name declared inside is what it uses once found.
+      - framework: eimzoFFI.framework
+        embed: false
+    prebuildScripts:
+      - name: Build the Rust core
+        script: |
+          set -euo pipefail
+          case "$CONFIGURATION" in
+            Release) PROFILE=release ;;
+            *) PROFILE=debug ;;
+          esac
+          "$SRCROOT/../scripts/build-core.sh" "$PROFILE"
+        basedOnDependencyAnalysis: false
+        # On a fresh clone, Generated/eimzo.swift doesn't exist yet, and it's
+        # listed directly as a source file above (a plain path, not a
+        # generated-files pattern Xcode can infer). Without an explicit
+        # output here, the build system validates every Compile Sources
+        # input's existence before running any phase -- including this one --
+        # and fails immediately with "Build input file cannot be found",
+        # never reaching the script that would have created it. Declaring it
+        # as this phase's output tells the build system the file is produced
+        # here, so that check is deferred until after the script has run.
+        outputFiles:
+          - $(SRCROOT)/Generated/eimzo.swift

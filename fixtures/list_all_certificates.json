@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "status": 1,
+  "certificates": [
+    {
+      "disk": "/path/to/checkout/fixtures/original-search/DSKEYS/",
+      "path": "",
+      "name": "TESTKEY",
+      "alias": "cn=test user,name=test,surname=user,1.2.860.3.16.1.2=12345678901234,serialnumber=test0001"
+    }
+  ]
+}

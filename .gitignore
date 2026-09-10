@@ -1,0 +1,11 @@
+target/
+.DS_Store
+build/
+DerivedData/
+.worktrees/
+.superpowers/
+target/
+Cargo.lock.bak
+tools/java-harness/*.class
+fixtures/original-search/
+__pycache__/

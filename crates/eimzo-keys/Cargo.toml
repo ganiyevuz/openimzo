@@ -1,0 +1,19 @@
+[package]
+name = "eimzo-keys"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Key-file discovery and session state for E-IMZO Renewed"
+
+[dependencies]
+eimzo-crypto = { path = "../eimzo-crypto" }
+eimzo-pki = { path = "../eimzo-pki" }
+parking_lot.workspace = true
+rand.workspace = true
+hex.workspace = true
+chrono.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+zeroize.workspace = true
+x509-cert.workspace = true

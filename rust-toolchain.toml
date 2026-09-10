@@ -1,0 +1,24 @@
+[toolchain]
+# Pinned to an exact release, not the "stable" alias: "stable" resolves to
+# whatever is current *when rustup runs*, so it silently drifts every ~6
+# weeks. A reproducible build needs the same compiler for every rebuild of a
+# given commit, indefinitely, not just "whatever's current stable" agreeing
+# with itself on one particular day. Bump this deliberately, the same way any
+# other dependency version bump would be reviewed.
+channel = "1.98.1"
+# Both architectures scripts/build-core.sh compiles for macos/eimzoFFI.framework's
+# universal binary. Listed here, not just installed by hand, so `rustup`
+# provisions both the first time anyone -- a contributor, or a CI runner --
+# builds against this pin, the same way it already provisions the compiler
+# itself; without this, a freshly pinned toolchain has only the host's own
+# target and the "Build the Rust core" phase fails on whichever architecture
+# isn't the machine building it.
+targets = ["aarch64-apple-darwin", "x86_64-apple-darwin"]
+# Clippy, for the same reason the targets above are listed: a pinned toolchain
+# provisions only the compiler unless the components it needs are named here.
+# `cargo clippy --workspace --all-targets -- -D warnings` is a gate on every
+# commit that touches Rust, so without this a freshly pinned toolchain -- a new
+# contributor's, or a CI runner's -- fails the gate with "'cargo-clippy' is not
+# installed for the toolchain", which reads like a broken project rather than a
+# missing component. Found exactly that way, on this project's first CI run.
+components = ["clippy"]

@@ -1,0 +1,33 @@
+[package]
+name = "eimzo-rpc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "The E-IMZO JSON-RPC contract: functions, status codes and localized reasons"
+
+[dependencies]
+eimzo-crypto = { path = "../eimzo-crypto" }
+eimzo-pki = { path = "../eimzo-pki" }
+eimzo-keys = { path = "../eimzo-keys" }
+async-trait.workspace = true
+tokio.workspace = true
+reqwest.workspace = true
+parking_lot.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+base64.workspace = true
+hex.workspace = true
+chrono.workspace = true
+rand.workspace = true
+rand_core.workspace = true
+x509-cert.workspace = true
+der.workspace = true
+const-oid.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+zeroize.workspace = true
+sha2.workspace = true
+cipher.workspace = true
+aes.workspace = true
+ecb.workspace = true
+rsa.workspace = true

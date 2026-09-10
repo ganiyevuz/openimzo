@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>E-IMZO-v6.4.7 - API-doc</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="e-imzo.js" type="text/javascript"></script>
+        <style type="text/css">
+            body {
+                font-family: sans-serif
+            }
+            .plugin {
+                font-family: sans-serif
+            }
+            .func {
+                font-family: monospace;
+            }
+            .code {
+                padding: 12px;
+                background-color: #ddffdd;
+                margin-top: 10px;
+            }
+            li {
+                padding: 7px 7px 10px 0px;
+            }
+            li.contents {
+                padding: 0px 0px 0px 0px;
+            }
+            ul.plugin ul.contents {
+                list-style-type: circle;
+            }
+            div.contents {
+                font-family: monospace;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="http://e-imzo.uz/"><img src="e-imzo-logo.png" /></a><br />
+        <font size=+1>API-документация для разработчиков</font><hr />
+        <script language="javascript">
+            window.document.body.onload = function (e) {
+                CAPIWS.apikey([
+                    'localhost', '96D0C1491615C82B9A54D9989779DF825B690748224C2B04F500F370D51827CE2644D8D4A82C18184D73AB8530BB8ED537269603F61DB0D03D2104ABF789970B',
+                    '127.0.0.1', 'A7BCFA5D490B351BE0754130DF03A068F855DB4333D43921125B9CF2670EF6A40370C646B90401955E1F7BC9CDBF59CE0B2C5467D820BE189C845D0B79CFC96F',
+                    'null', 'E0A205EC4E7B78BBB56AFF83A733A1BB9FD39D562E67978CC5E7D73B0951DB1954595A20672A63332535E13CC6EC1E1FC8857BB09E0855D7E76E411B6FA16E9D'
+                ], function (event, data) {
+                    if (data.success) {
+                        CAPIWS.apidoc(function (event, data) {
+                            var cdivUl = document.createElement("ul");
+                            cdivUl.setAttribute("class", "contents");
+
+                            var plist = document.createElement("ul");
+                            plist.setAttribute("class", "plugin");
+                            for (var p in data) {
+                                var plugin = data[p];
+
+                                var pdiv = document.createElement("div");
+                                pdiv.setAttribute("class", "plugin");
+                                var pdivDesc = document.createElement("div");
+                                var a2 = document.createElement("a");
+                                a2.setAttribute("name", plugin.name);
+                                a2.innerHTML = "<b>" + plugin.name + "</b> - " + plugin.description;
+                                pdivDesc.appendChild(a2);
+                                pdiv.appendChild(pdivDesc);
+
+                                var cdivList = document.createElement("li");
+                                var a = document.createElement("a");
+                                a.setAttribute("href", "#" + plugin.name);
+                                a.innerHTML = a2.innerHTML;
+                                cdivList.appendChild(a);
+                                cdivUl.appendChild(cdivList);
+
+                                var cdivflist = document.createElement("ul");
+                                cdivflist.setAttribute("class", "contents");
+                                cdivList.appendChild(cdivflist);
+
+                                var flist = document.createElement("ul");
+
+                                for (var f in plugin.functions) {
+                                    var func = plugin.functions[f];
+                                    var fdiv = document.createElement("div");
+                                    fdiv.setAttribute("class", "func");
+
+                                    var fdivDesc = document.createElement("div");
+                                    var a3 = document.createElement("a");
+                                    a3.setAttribute("name", plugin.name + "." + func.name);
+                                    a3.innerHTML = "<b>" + func.name + "</b> - " + func.description;   
+                                    fdivDesc.appendChild(a3);
+                                    fdiv.appendChild(fdivDesc);
+
+                                    var cdivflistLi = document.createElement("li");
+                                    cdivflistLi.setAttribute("class", "contents");
+                                    var a1 = document.createElement("a");
+                                    a1.setAttribute("href", "#" + plugin.name + "." + func.name);
+                                    a1.innerHTML = a3.innerHTML;
+                                    cdivflistLi.appendChild(a1);
+                                    cdivflist.appendChild(cdivflistLi);
+
+
+                                    var call = "<font color=#a626a4>CAPIWS</font>.callFunction({" +
+                                            "<br />&nbsp;&nbsp;&nbsp;&nbsp;<font color=#50a14f>plugin</font>&nbsp;&nbsp;&nbsp;&nbsp;:<font color=#880000>\"" + plugin.name + "\"</font>," +
+                                            "<br />&nbsp;&nbsp;&nbsp;&nbsp;<font color=#50a14f>name</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<font color=#880000>\"" + func.name + "\"</font>";
+                                    if (func.arguments && func.arguments.length > 0) {
+                                        call += ",<br />&nbsp;&nbsp;&nbsp;&nbsp;<font color=#50a14f>arguments</font>&nbsp;:[";
+                                        for (var a in func.arguments) {
+                                            var arg = func.arguments[a];
+                                            call += "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=#a0a1a7><i>//" + arg.description + "</i></font>";
+                                            call += "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + arg.name + "</b>" + (a < func.arguments.length - 1 ? "," : "");
+                                        }
+                                        call += "<br />&nbsp;&nbsp;&nbsp;&nbsp;]";
+                                    }
+                                    call += "<br />&nbsp;&nbsp;},<br />&nbsp;&nbsp;<font color=#4078f2>function</font>(event, data){" +
+                                            "<br />&nbsp;&nbsp;&nbsp;&nbsp;<font color=#a626a4>console</font>.log(data);" +
+                                            "<br />&nbsp;&nbsp;}," +
+                                            "<br />&nbsp;&nbsp;<font color=#4078f2>function</font>(error){" +
+                                            "<br />&nbsp;&nbsp;&nbsp;&nbsp;<font color=#a626a4>window</font>.alert(error);" +
+                                            "<br />&nbsp;&nbsp;}<br />);";
+
+                                    var fdivJs = document.createElement("div");
+                                    fdivJs.setAttribute("class", "code");
+                                    fdivJs.innerHTML = call;
+                                    fdiv.appendChild(fdivJs);
+
+                                    var flistLi = document.createElement("li");
+                                    flistLi.appendChild(fdiv);
+                                    flist.appendChild(flistLi);
+                                }
+
+                                pdiv.appendChild(flist);
+
+                                var plistLi = document.createElement("li");
+                                plistLi.appendChild(pdiv);
+                                plist.appendChild(plistLi);
+                            }
+
+                            var cdiv = document.createElement("div");
+                            cdiv.setAttribute("class", "contents");
+                            cdiv.appendChild(cdivUl);
+                            document.body.appendChild(cdiv);
+                            
+                            var hr = document.createElement("hr");
+                            document.body.appendChild(hr);
+                            
+                            document.body.appendChild(plist);
+                        }, function (e) {
+                            alert(e);
+                        });
+                    } else {
+                        alert(data.reason);
+                    }
+                }, function (e) {
+                    alert(e);
+                })
+            };
+        </script>        
+    </body>
+</html>

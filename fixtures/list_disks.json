@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "status": 1,
+  "disks": [
+    "/path/to/checkout/fixtures/original-search/DSKEYS/",
+    "/path/to/checkout/fixtures/original-search/"
+  ]
+}

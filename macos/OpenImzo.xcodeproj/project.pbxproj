@@ -1,0 +1,509 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E44054A2FAC12021D37E70C /* RequestPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB91E9229CB74BB094FF90C /* RequestPanel.swift */; };
+		1334C1746FCFEDC56F1C5CD5 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBDFF8EAEF5D36691E839AC /* ActivityView.swift */; };
+		1CE37C4B388D87AD12FB6FAA /* ConfirmPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F9C3E1FB6D6037B032CA5E /* ConfirmPanels.swift */; };
+		1F70FBD780E16F85A1114840 /* SitesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89474E6D1011188D7D76172B /* SitesView.swift */; };
+		221899A0779CF2F5D6CCE9C6 /* CoreEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */; };
+		2D63333174E2F396C424B754 /* PasswordPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383028CE76367D1E12A5F85 /* PasswordPanel.swift */; };
+		378AEA60FABFF69FB8C5ED68 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883CB300DD91BB7AEC6E336 /* UserSettings.swift */; };
+		46525B31E81FE74D9B34F41A /* MacUiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */; };
+		48C0FC687CC6CB41CC3400AF /* EventPump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0F458F419F0CC09C7A1D56 /* EventPump.swift */; };
+		48E5697F4A036C62292499E1 /* eimzoFFI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E145A070B3E913FD352FCD68 /* eimzoFFI.framework */; };
+		51DD14EAC0C98C9B0B8237F7 /* AppDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */; };
+		6BFD6378E05B4B94621D51BC /* FirstRunFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D979EB4E333DA1EFA2952F /* FirstRunFlow.swift */; };
+		817E177D3F951BD13D1280F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC28C4A5A4331816850F0A6D /* SettingsView.swift */; };
+		86D4841C3390AA2BC8E6C963 /* eimzo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211C0B9221D9BD29D128626 /* eimzo.swift */; };
+		8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE38D338AA8A2760370AED /* TrustInstaller.swift */; };
+		89D6CB4F5E17645B9C9892FB /* NewPfxPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */; };
+		94799042F4F039CF896E595F /* TCPProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DBB6485F82F013FF6064E /* TCPProbe.swift */; };
+		AC76A2750AFCE64EE57FC52A /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD39C98077A45CE20AF06B /* MainWindow.swift */; };
+		B16E2965204B9E6D4C93FFB1 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EB12B5D3D165FC395957EC /* AppLanguage.swift */; };
+		B813FBFA44C6B818316D2373 /* PermissionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */; };
+		BD736DD8D6D23DE46825778C /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA7A38478BB8FBEB1CCA0AF /* MenuBarContent.swift */; };
+		BEF39CF7B5359C746A4C5E26 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */; };
+		C81EDB02B7E6AE2D2D763279 /* OpenImzoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B3BACEE744E2891313F7D2 /* OpenImzoApp.swift */; };
+		DE4D3869271622D09BC7F691 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9058E89115AAD7C70F49373F /* Localizable.xcstrings */; };
+		E5FB480983822B7359310308 /* AppIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590D2A91A3EDC2D539B4481C /* AppIdentity.swift */; };
+		EFAAA2BE1BDA8B178634F460 /* MacPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D9764D02497877FB12D49 /* MacPlatform.swift */; };
+		F941B64BC9A0ABCCC7F1C8E0 /* KeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2AA9620819B77633CB2BAF /* KeysView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacUiDelegate.swift; sourceTree = "<group>"; };
+		14CE38D338AA8A2760370AED /* TrustInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustInstaller.swift; sourceTree = "<group>"; };
+		1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPfxPanel.swift; sourceTree = "<group>"; };
+		204DBB6485F82F013FF6064E /* TCPProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPProbe.swift; sourceTree = "<group>"; };
+		2DBDFF8EAEF5D36691E839AC /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		3883CB300DD91BB7AEC6E336 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreEngine.swift; sourceTree = "<group>"; };
+		46BD39C98077A45CE20AF06B /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		47EB12B5D3D165FC395957EC /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		5211C0B9221D9BD29D128626 /* eimzo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eimzo.swift; sourceTree = "<group>"; };
+		5383028CE76367D1E12A5F85 /* PasswordPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPanel.swift; sourceTree = "<group>"; };
+		590D2A91A3EDC2D539B4481C /* AppIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdentity.swift; sourceTree = "<group>"; };
+		6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		6B0F458F419F0CC09C7A1D56 /* EventPump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPump.swift; sourceTree = "<group>"; };
+		7C21CD81BDE909A3CE5EE328 /* OpenImzo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenImzo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84F9C3E1FB6D6037B032CA5E /* ConfirmPanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPanels.swift; sourceTree = "<group>"; };
+		89474E6D1011188D7D76172B /* SitesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitesView.swift; sourceTree = "<group>"; };
+		8FA7A38478BB8FBEB1CCA0AF /* MenuBarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
+		9058E89115AAD7C70F49373F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		92D979EB4E333DA1EFA2952F /* FirstRunFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunFlow.swift; sourceTree = "<group>"; };
+		AC28C4A5A4331816850F0A6D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AE2AA9620819B77633CB2BAF /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
+		D0B3BACEE744E2891313F7D2 /* OpenImzoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenImzoApp.swift; sourceTree = "<group>"; };
+		DD0D9764D02497877FB12D49 /* MacPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPlatform.swift; sourceTree = "<group>"; };
+		E145A070B3E913FD352FCD68 /* eimzoFFI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = eimzoFFI.framework; sourceTree = "<group>"; };
+		E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPanel.swift; sourceTree = "<group>"; };
+		FAB91E9229CB74BB094FF90C /* RequestPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPanel.swift; sourceTree = "<group>"; };
+		FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDirectories.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1F30DC0EDB797AA2F41ACB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48E5697F4A036C62292499E1 /* eimzoFFI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05CE0DF8D11466945591E900 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				8FA7A38478BB8FBEB1CCA0AF /* MenuBarContent.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		3CDFBF86882403BD05DEFF7E /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */,
+				2DBDFF8EAEF5D36691E839AC /* ActivityView.swift */,
+				AE2AA9620819B77633CB2BAF /* KeysView.swift */,
+				46BD39C98077A45CE20AF06B /* MainWindow.swift */,
+				AC28C4A5A4331816850F0A6D /* SettingsView.swift */,
+				89474E6D1011188D7D76172B /* SitesView.swift */,
+			);
+			path = Window;
+			sourceTree = "<group>";
+		};
+		41A3878D0FE4840E2B03F1B4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7C21CD81BDE909A3CE5EE328 /* OpenImzo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CB8254F28C4EAF0A59D5B8B /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				5211C0B9221D9BD29D128626 /* eimzo.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		6E8F995A9005E26EEE743D17 /* OpenImzo */ = {
+			isa = PBXGroup;
+			children = (
+				9058E89115AAD7C70F49373F /* Localizable.xcstrings */,
+				D0B3BACEE744E2891313F7D2 /* OpenImzoApp.swift */,
+				A7A37491E3FF3C67599622C7 /* Core */,
+				E38F261BC940198920EEB135 /* FirstRun */,
+				05CE0DF8D11466945591E900 /* Menu */,
+				F045640C1A0C6CF364348E14 /* Panels */,
+				3CDFBF86882403BD05DEFF7E /* Window */,
+			);
+			path = OpenImzo;
+			sourceTree = "<group>";
+		};
+		91DB3B04A2E5C60C5BAE606B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E145A070B3E913FD352FCD68 /* eimzoFFI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A3009796EB95651FCA9BF648 = {
+			isa = PBXGroup;
+			children = (
+				4CB8254F28C4EAF0A59D5B8B /* Generated */,
+				6E8F995A9005E26EEE743D17 /* OpenImzo */,
+				91DB3B04A2E5C60C5BAE606B /* Frameworks */,
+				41A3878D0FE4840E2B03F1B4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A7A37491E3FF3C67599622C7 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */,
+				590D2A91A3EDC2D539B4481C /* AppIdentity.swift */,
+				47EB12B5D3D165FC395957EC /* AppLanguage.swift */,
+				3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */,
+				6B0F458F419F0CC09C7A1D56 /* EventPump.swift */,
+				DD0D9764D02497877FB12D49 /* MacPlatform.swift */,
+				0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */,
+				204DBB6485F82F013FF6064E /* TCPProbe.swift */,
+				14CE38D338AA8A2760370AED /* TrustInstaller.swift */,
+				3883CB300DD91BB7AEC6E336 /* UserSettings.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E38F261BC940198920EEB135 /* FirstRun */ = {
+			isa = PBXGroup;
+			children = (
+				92D979EB4E333DA1EFA2952F /* FirstRunFlow.swift */,
+			);
+			path = FirstRun;
+			sourceTree = "<group>";
+		};
+		F045640C1A0C6CF364348E14 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				84F9C3E1FB6D6037B032CA5E /* ConfirmPanels.swift */,
+				1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */,
+				5383028CE76367D1E12A5F85 /* PasswordPanel.swift */,
+				E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */,
+				FAB91E9229CB74BB094FF90C /* RequestPanel.swift */,
+			);
+			path = Panels;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		491795B416317BDFA9996DF0 /* OpenImzo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEC9F023BA64A99DDBB124B0 /* Build configuration list for PBXNativeTarget "OpenImzo" */;
+			buildPhases = (
+				76E6FDAAFFBFD73C1EBD5155 /* Build the Rust core */,
+				2058AEBA51500019CCB9BDEC /* Sources */,
+				DC743561DB6008EE1776C69B /* Resources */,
+				F1F30DC0EDB797AA2F41ACB8 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenImzo;
+			packageProductDependencies = (
+			);
+			productName = OpenImzo;
+			productReference = 7C21CD81BDE909A3CE5EE328 /* OpenImzo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3108127A960A519F81050B74 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					491795B416317BDFA9996DF0 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F33338E3946BD82DCF5213B4 /* Build configuration list for PBXProject "OpenImzo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				ru,
+				uz,
+			);
+			mainGroup = A3009796EB95651FCA9BF648;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 41A3878D0FE4840E2B03F1B4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				491795B416317BDFA9996DF0 /* OpenImzo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DC743561DB6008EE1776C69B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE4D3869271622D09BC7F691 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		76E6FDAAFFBFD73C1EBD5155 /* Build the Rust core */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build the Rust core";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Generated/eimzo.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\ncase \"$CONFIGURATION\" in\n  Release) PROFILE=release ;;\n  *) PROFILE=debug ;;\nesac\n\"$SRCROOT/../scripts/build-core.sh\" \"$PROFILE\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2058AEBA51500019CCB9BDEC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEF39CF7B5359C746A4C5E26 /* AboutView.swift in Sources */,
+				1334C1746FCFEDC56F1C5CD5 /* ActivityView.swift in Sources */,
+				51DD14EAC0C98C9B0B8237F7 /* AppDirectories.swift in Sources */,
+				E5FB480983822B7359310308 /* AppIdentity.swift in Sources */,
+				B16E2965204B9E6D4C93FFB1 /* AppLanguage.swift in Sources */,
+				1CE37C4B388D87AD12FB6FAA /* ConfirmPanels.swift in Sources */,
+				221899A0779CF2F5D6CCE9C6 /* CoreEngine.swift in Sources */,
+				48C0FC687CC6CB41CC3400AF /* EventPump.swift in Sources */,
+				6BFD6378E05B4B94621D51BC /* FirstRunFlow.swift in Sources */,
+				F941B64BC9A0ABCCC7F1C8E0 /* KeysView.swift in Sources */,
+				EFAAA2BE1BDA8B178634F460 /* MacPlatform.swift in Sources */,
+				46525B31E81FE74D9B34F41A /* MacUiDelegate.swift in Sources */,
+				AC76A2750AFCE64EE57FC52A /* MainWindow.swift in Sources */,
+				BD736DD8D6D23DE46825778C /* MenuBarContent.swift in Sources */,
+				89D6CB4F5E17645B9C9892FB /* NewPfxPanel.swift in Sources */,
+				C81EDB02B7E6AE2D2D763279 /* OpenImzoApp.swift in Sources */,
+				2D63333174E2F396C424B754 /* PasswordPanel.swift in Sources */,
+				B813FBFA44C6B818316D2373 /* PermissionPanel.swift in Sources */,
+				0E44054A2FAC12021D37E70C /* RequestPanel.swift in Sources */,
+				817E177D3F951BD13D1280F5 /* SettingsView.swift in Sources */,
+				1F70FBD780E16F85A1114840 /* SitesView.swift in Sources */,
+				94799042F4F039CF896E595F /* TCPProbe.swift in Sources */,
+				8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */,
+				378AEA60FABFF69FB8C5ED68 /* UserSettings.swift in Sources */,
+				86D4841C3390AA2BC8E6C963 /* eimzo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2B8A9EDCC2CE0FB416EA5FCA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3339E6EB771AF7ADD9A56ADA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6547FF266830C2995FB944D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = OpenImzo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ganiyevuz.openimzo;
+				PRODUCT_NAME = OpenImzo;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		C1B9963C6B6A7519DB875545 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = OpenImzo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ganiyevuz.openimzo;
+				PRODUCT_NAME = OpenImzo;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DEC9F023BA64A99DDBB124B0 /* Build configuration list for PBXNativeTarget "OpenImzo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6547FF266830C2995FB944D0 /* Debug */,
+				C1B9963C6B6A7519DB875545 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F33338E3946BD82DCF5213B4 /* Build configuration list for PBXProject "OpenImzo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3339E6EB771AF7ADD9A56ADA /* Debug */,
+				2B8A9EDCC2CE0FB416EA5FCA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3108127A960A519F81050B74 /* Project object */;
+}

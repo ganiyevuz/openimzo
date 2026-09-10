@@ -1,0 +1,111 @@
+# Builds the artifact a release is verified against, on infrastructure nobody here
+# controls, with a log anyone can read end to end -- see docs/verifying-a-release.md,
+# which this workflow exists to back up. It runs exactly one script,
+# scripts/reproducible-build.sh, so that what happens here is what a reader following
+# that script on their own machine also does; the value of this workflow is being
+# boring and legible, not clever.
+#
+# Triggered by pushing a tag like v1.0.0. Also runnable by hand (workflow_dispatch) to
+# check that a change to this file or to the build script still produces a clean build
+# without having to cut a release to find out.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
+
+# The narrowest set that actually does the job: reading the repo, publishing a signed
+# provenance attestation (needs id-token to mint it and attestations to store it), and
+# attaching files to the GitHub release (contents: write).
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    # This project's macOS floor is 14 (macos/project.yml), and its pinned Xcode
+    # (.xcode-version) is a version this runner label is expected to carry preinstalled
+    # under /Applications/Xcode_<version>.app, GitHub's own convention for offering
+    # multiple side-by-side Xcode versions on one image. If that version isn't on the
+    # image yet, the "Select the pinned Xcode" step below fails loudly rather than
+    # silently building with whatever the runner's default happens to be -- a silent
+    # fallback would quietly break the promise this whole workflow exists to keep.
+    runs-on: macos-15
+
+    steps:
+      - name: Check out the exact commit being released
+        uses: actions/checkout@v5
+        with:
+          # scripts/reproducible-build.sh derives SOURCE_DATE_EPOCH from the commit's
+          # own timestamp (`git log -1`), which a shallow checkout can still answer for
+          # HEAD -- fetch-depth 0 isn't needed for that. It's fetched anyway so
+          # `git describe`/tag lookups elsewhere in this job see real history rather
+          # than a single detached commit.
+          fetch-depth: 0
+
+      - name: Select the pinned Xcode
+        run: |
+          set -euo pipefail
+          version="$(cat .xcode-version)"
+          app="/Applications/Xcode_${version}.app"
+          if [ ! -d "$app" ]; then
+            echo "::error::Xcode $version (.xcode-version) is not installed on this runner image ($app not found)." >&2
+            echo "Available Xcode versions on this runner:" >&2
+            ls /Applications | grep -i '^Xcode' >&2 || true
+            exit 1
+          fi
+          sudo xcode-select -s "$app"
+          xcodebuild -version
+
+      - name: Install the pinned Rust toolchain
+        run: |
+          set -euo pipefail
+          # `rustup show` reads rust-toolchain.toml on its own and installs the pinned
+          # channel (and, per that file's own `targets` list, both Darwin targets) if
+          # it isn't already present -- this just makes that happen as its own visible,
+          # timed step rather than hiding inside the first build command.
+          rustup show
+          rustc --version
+          cargo --version
+
+      - name: Build the unsigned, reproducible artifact
+        run: scripts/reproducible-build.sh dist
+
+      - name: Publish the hash to the job summary
+        run: |
+          {
+            echo "### OpenImzo unsigned build"
+            echo
+            echo '```'
+            cat dist/SHA256SUMS
+            echo '```'
+            echo
+            echo "Rebuild and compare it yourself: see [docs/verifying-a-release.md](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/docs/verifying-a-release.md)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # A signed statement -- backed by GitHub's own OIDC identity for this exact
+      # workflow run, not by anything this repository's maintainers assert -- of which
+      # workflow, commit, and repository produced this file. Verifiable independently
+      # with `gh attestation verify`; see docs/verifying-a-release.md.
+      - name: Attach build provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: dist/OpenImzo-unsigned-macos.zip
+
+      - name: Attach to the GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/OpenImzo-unsigned-macos.zip
+            dist/SHA256SUMS
+          # The signed convenience build (OpenImzo-signed-macos.zip) is not produced
+          # here: it needs the maintainer's actual Apple Developer ID and notarization
+          # credentials, which this workflow deliberately never has access to. It is
+          # built and attached to the same release by hand, from the exact unsigned
+          # .app this job already built and hashed -- see docs/verifying-a-release.md
+          # for what that means for comparing the two.
+          fail_on_unmatched_files: true

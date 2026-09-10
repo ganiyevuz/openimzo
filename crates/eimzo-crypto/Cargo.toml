@@ -1,0 +1,20 @@
+[package]
+name = "eimzo-crypto"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "GOST-family primitives under the Uzbek E-IMZO OIDs"
+
+[dependencies]
+der.workspace = true
+spki.workspace = true
+pkcs8.workspace = true
+const-oid.workspace = true
+num-bigint.workspace = true
+crypto-bigint.workspace = true
+num-traits.workspace = true
+num-integer.workspace = true
+rand_core.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
