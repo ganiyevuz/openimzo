@@ -14,6 +14,25 @@ if [ -z "$APP" ] || [ ! -d "$APP" ]; then
   echo "usage: scripts/make-dmg.sh /path/to/OpenImzo.app [output.dmg]" >&2
   exit 2
 fi
+
+# A plain `xcodebuild build` produces a binary for the machine that ran it and
+# says nothing about it, so an Intel Mac downloading the image would simply be
+# told the app is damaged. Build releases with:
+#
+#   xcodebuild ... -destination 'generic/platform=macOS' \
+#     ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO
+#
+# and this refuses anything else, rather than trusting that whoever ran the
+# build remembered. Checked, not asserted.
+BIN="$APP/Contents/MacOS/OpenImzo"
+for arch in arm64 x86_64; do
+  if ! lipo -archs "$BIN" | tr ' ' '\n' | grep -qx "$arch"; then
+    echo "refusing: $BIN has no $arch slice (found: $(lipo -archs "$BIN"))." >&2
+    echo "a release image must run on both Apple Silicon and Intel." >&2
+    exit 1
+  fi
+done
+
 OUT="${2:-dist/OpenImzo.dmg}"
 mkdir -p "$(dirname "$OUT")"
 NAME="OpenImzo"
