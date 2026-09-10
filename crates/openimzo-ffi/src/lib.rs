@@ -16,6 +16,7 @@
 mod delegate;
 mod engine;
 mod events;
+mod identity;
 mod settings;
 mod types;
 

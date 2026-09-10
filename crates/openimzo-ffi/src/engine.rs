@@ -297,22 +297,49 @@ fn apply_settings(dispatcher: &Dispatcher, settings: &Settings) {
 /// its read-only bypass does allow. `KeyEntry` mirrors that honestly with
 /// empty strings rather than inventing a placeholder.
 fn key_entry_from_info(info: openimzo_keys::KeyInfo) -> KeyEntry {
+    let subject_name = info.subject_name.unwrap_or_default();
+    let identity = crate::identity::identity_from(&info.alias, &subject_name);
+    let is_pfx = extension_is(&info.full_path, "pfx");
+
+    // A YKS carries its certificate in the clear, so `info` already has the validity. A PFX does
+    // not, and the alias is the only other place it could be — the original writes `validfrom` /
+    // `validto` into aliases it generates. Neither is guaranteed, which is what `has_validity`
+    // is for: an unknown expiry must not read as "not expired".
+    let (alias_from, alias_to) = crate::identity::alias_validity_millis(&info.alias);
+    let valid_from_ms = info.valid_from.or(alias_from);
+    let valid_to_ms = info.valid_to.or(alias_to);
+
     let now_ms = openimzo_pki::x509::epoch_millis(std::time::SystemTime::now());
-    let expired = info.valid_to.map(|ms| ms < now_ms).unwrap_or(false);
     KeyEntry {
         disk: info.disk,
         path: info.path,
         name: info.name,
-        alias: info.alias,
         full_path: info.full_path.display().to_string(),
-        subject_name: info.subject_name.unwrap_or_default(),
         issuer_name: info.issuer_name.unwrap_or_default(),
         serial_number: info.serial_number.unwrap_or_default(),
-        valid_from: info.valid_from.map(format_epoch_millis).unwrap_or_default(),
-        valid_to: info.valid_to.map(format_epoch_millis).unwrap_or_default(),
+        valid_from: valid_from_ms.map(format_epoch_millis).unwrap_or_default(),
+        valid_to: valid_to_ms.map(format_epoch_millis).unwrap_or_default(),
         public_key_alg_name: info.public_key_alg_name.unwrap_or_default(),
-        expired,
+        expired: valid_to_ms.map(|ms| ms < now_ms).unwrap_or(false),
+        has_validity: valid_to_ms.is_some(),
+        days_remaining: valid_to_ms.map(whole_days_until).unwrap_or(0),
+        format: if is_pfx { "PFX".to_string() } else { "YKS".to_string() },
+        // A PFX with no readable subject is locked, not empty. A YKS in the same state genuinely
+        // has nothing to show, and offering to unlock it would be offering something that cannot
+        // work — `unlock_key` refuses anything that is not a PFX.
+        locked: is_pfx && subject_name.is_empty(),
+        subject_name,
+        alias: info.alias,
+        identity,
     }
+}
+
+/// Whole days from now until `ms`, rounded toward zero and negative once past — so "expires
+/// today" and "expired today" are 0 and -0, both of which the shell shows as the day itself
+/// rather than as a count.
+fn whole_days_until(ms: i64) -> i64 {
+    let now = openimzo_pki::x509::epoch_millis(std::time::SystemTime::now());
+    (ms - now) / (24 * 60 * 60 * 1000)
 }
 
 /// `yyyy.MM.dd HH:mm:ss`, local time zone, matching every other date this
@@ -851,7 +878,10 @@ impl Engine {
                     tracing::debug!(error = %e, "unlock_key: could not read certificate");
                     EngineError::KeyFile
                 })?;
-                let expired = openimzo_pki::x509::system_time(&cert.tbs_certificate.validity.not_after) < std::time::SystemTime::now();
+                let not_after = openimzo_pki::x509::system_time(&cert.tbs_certificate.validity.not_after);
+                let expired = not_after < std::time::SystemTime::now();
+                let identity = crate::identity::identity_from(&alias, &view.subject_name);
+                let days_remaining = whole_days_until(openimzo_pki::x509::epoch_millis(not_after));
                 Ok(CertificateSummary {
                     subject_name: view.subject_name,
                     issuer_name: view.issuer_name,
@@ -860,6 +890,8 @@ impl Engine {
                     valid_to: view.valid_to,
                     public_key_alg_name: view.public_key.map(|p| p.key_alg_name).unwrap_or_default(),
                     expired,
+                    identity,
+                    days_remaining,
                 })
             })
             .await

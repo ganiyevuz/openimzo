@@ -1,72 +1,108 @@
 import AppKit
 import SwiftUI
 
-/// A pragmatic reader for the BouncyCastle-style DN string `KeyEntry.subjectName` carries —
-/// `CN=Test User,O=Org,C=UZ,1.2.860.3.16.1.2=123,SERIALNUMBER=X`, per `crates/openimzo-pki/src/dn.rs`
-/// — good enough for the handful of attributes this view shows. Not a general X.500 parser, and
-/// never used for anything security-relevant: `KeyEntry.subjectName` itself is display-only,
-/// same as everywhere else this app shows it.
+/// How a key's validity reads at a glance.
 ///
-/// `KeyEntry` carries no separate "national identifier" or "organisation" field (only the raw
-/// subject DN) — the design spec's own bullet lists those as things the Keys view should show,
-/// so this is what turns the one string the core actually gives into them. The Uzbek PKI OID arc
-/// `1.2.860.3.16.1.x` has no symbolic name in `crates/openimzo-pki/src/dn.rs`'s own `SYMBOLS` table
-/// (it stays numeric, matching the original BouncyCastle-based client's own output) —
-/// `1.2.860.3.16.1.1` is INN (legal entities), `1.2.860.3.16.1.2` is PINFL (individuals), the
-/// standard pair of national identifiers used across Uzbek digital-signature certificates.
-private struct KeySubjectInfo {
-    let commonName: String?
-    let organisation: String?
-    let nationalIdentifier: (label: String, value: String)?
-    /// `false` for a PFX whose password hasn't been given yet — `Discovery` can't read a PFX's
-    /// certificate without it, so every field above is empty for those (see `KeyEntry.disk`'s
-    /// sibling doc comment in `crates/openimzo-ffi/src/engine.rs`) — unless `unlocked` supplies the
-    /// summary `CoreEngine.unlockKey(_:password:)` already fetched for this row this session.
-    let hasCertificateDetails: Bool
+/// `unknown` is a real state and not a synonym for "fine": a locked PFX whose alias carries no
+/// `validto` has no expiry date to judge, and a badge that quietly said "Valid" for it would be
+/// asserting something nobody has checked.
+enum KeyValidity {
+    case unknown
+    case valid(daysRemaining: Int64)
+    case expiringSoon(daysRemaining: Int64)
+    case expired
 
-    init(_ key: KeyEntry, unlocked: CertificateSummary? = nil) {
-        let subjectName = unlocked?.subjectName ?? key.subjectName
-        hasCertificateDetails = !subjectName.isEmpty
-        let attributes = Self.parseDN(subjectName)
-        commonName = attributes["CN"]
-        organisation = attributes["O"]
-        if let pinfl = attributes["1.2.860.3.16.1.2"] {
-            nationalIdentifier = ("PINFL", pinfl)
-        } else if let inn = attributes["1.2.860.3.16.1.1"] {
-            nationalIdentifier = ("INN", inn)
+    /// A month. Long enough that someone can still get a new key issued before the old one stops
+    /// working, which is the only thing this warning is for.
+    static let soonThresholdDays: Int64 = 30
+
+    init(hasValidity: Bool, expired: Bool, daysRemaining: Int64) {
+        if !hasValidity {
+            self = .unknown
+        } else if expired {
+            self = .expired
+        } else if daysRemaining <= Self.soonThresholdDays {
+            self = .expiringSoon(daysRemaining: daysRemaining)
         } else {
-            nationalIdentifier = nil
+            self = .valid(daysRemaining: daysRemaining)
         }
-    }
-
-    private static func parseDN(_ dn: String) -> [String: String] {
-        var result: [String: String] = [:]
-        for component in dn.split(separator: ",") {
-            guard let equals = component.firstIndex(of: "=") else { continue }
-            let key = component[component.startIndex..<equals].trimmingCharacters(in: .whitespaces)
-            let value = component[component.index(after: equals)...].trimmingCharacters(in: .whitespaces)
-            guard !key.isEmpty else { continue }
-            result[key] = value
-        }
-        return result
     }
 }
 
 private struct ValidityBadge: View {
-    let hasDetails: Bool
-    let expired: Bool
+    let validity: KeyValidity
 
     var body: some View {
-        if !hasDetails {
+        switch validity {
+        case .unknown:
             Label("Unknown", systemImage: "questionmark.circle")
                 .foregroundStyle(.secondary)
-        } else if expired {
+        case .expired:
             Label("Expired", systemImage: "xmark.seal.fill")
                 .foregroundStyle(.red)
-        } else {
+        case .expiringSoon:
+            Label("Expires soon", systemImage: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+        case .valid:
             Label("Valid", systemImage: "checkmark.seal.fill")
                 .foregroundStyle(.green)
         }
+    }
+}
+
+/// Everything one row of the Keys list shows, resolved once.
+///
+/// The certificate summary, when the person has unlocked this key this session, wins over what
+/// the row was scanned with — that is the whole point of unlocking one.
+struct KeyPresentation {
+    let identity: KeyIdentity
+    let validity: KeyValidity
+    let validFrom: String
+    let validTo: String
+    let issuerName: String
+    let serialNumber: String
+    let publicKeyAlgName: String
+    let subjectName: String
+    /// True only for a PFX still waiting on its password. A YKS with nothing to show cannot be
+    /// unlocked, so it never offers to be.
+    let isLocked: Bool
+
+    init(_ key: KeyEntry, unlocked: CertificateSummary?) {
+        identity = unlocked?.identity ?? key.identity
+        issuerName = unlocked?.issuerName ?? key.issuerName
+        serialNumber = unlocked?.serialNumber ?? key.serialNumber
+        publicKeyAlgName = unlocked?.publicKeyAlgName ?? key.publicKeyAlgName
+        subjectName = unlocked?.subjectName ?? key.subjectName
+        isLocked = unlocked == nil && key.locked
+        if let unlocked {
+            validFrom = unlocked.validFrom
+            validTo = unlocked.validTo
+            validity = KeyValidity(hasValidity: true, expired: unlocked.expired, daysRemaining: unlocked.daysRemaining)
+        } else {
+            validFrom = key.validFrom
+            validTo = key.validTo
+            validity = KeyValidity(hasValidity: key.hasValidity, expired: key.expired, daysRemaining: key.daysRemaining)
+        }
+    }
+
+    /// What to call this key. The alias names the person even when the certificate cannot be
+    /// read, which is why a locked PFX is not anonymous; the file name is the last resort.
+    func displayName(fallback: String) -> String {
+        if !identity.commonName.isEmpty { return identity.commonName }
+        if !identity.organisation.isEmpty { return identity.organisation }
+        return fallback
+    }
+
+    /// The national identifier to show in the list, with the label the original uses for it.
+    /// An organisation's key leads with the organisation's tax number; a person's with PINFL.
+    var primaryIdentifier: (label: LocalizedStringKey, value: String)? {
+        if identity.isOrganisation, !identity.tinOrganisation.isEmpty {
+            return ("TIN", identity.tinOrganisation)
+        }
+        if !identity.pinfl.isEmpty { return ("PINFL", identity.pinfl) }
+        if !identity.tinIndividual.isEmpty { return ("TIN", identity.tinIndividual) }
+        if !identity.tinOrganisation.isEmpty { return ("TIN", identity.tinOrganisation) }
+        return nil
     }
 }
 
@@ -75,39 +111,55 @@ private struct KeyRow: View {
     var coreEngine: CoreEngine
     @Binding var activeSheet: KeysView.ActiveSheet?
 
-    private var unlocked: CertificateSummary? { coreEngine.unlockedSummary(for: key) }
-    private var subject: KeySubjectInfo { KeySubjectInfo(key, unlocked: unlocked) }
-    private var isExpired: Bool { unlocked?.expired ?? key.expired }
-    private var isPfx: Bool { key.fullPath.lowercased().hasSuffix(".pfx") }
+    private var presentation: KeyPresentation {
+        KeyPresentation(key, unlocked: coreEngine.unlockedSummary(for: key))
+    }
 
     var body: some View {
+        let shown = presentation
+        // Hoisted out of the `Button(...)` below deliberately: `scripts/check-localization.py`
+        // scans a localizable initializer's whole first-argument span for string literals, so a
+        // `key.format == "PFX"` written inline there makes it hunt the catalogue for a
+        // translation of the word PFX. The check is a source-level heuristic and this is the
+        // shape that confuses it; keeping the comparison out of the argument is free.
+        let isPfxKey = key.format == "PFX"
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: "key.fill")
-                .foregroundStyle(.secondary)
-                .frame(width: 20)
+            // The format, not a generic key icon: PFX and YKS behave differently — only a PFX can
+            // be unlocked, exported as a QR-key, or converted to YKS — so which one a row is is
+            // worth more than a picture of a key repeated down the column.
+            Text(verbatim: key.format)
+                .font(.caption2.monospaced().weight(.semibold))
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(Color.secondary.opacity(0.15), in: RoundedRectangle(cornerRadius: 4))
+                .frame(width: 44, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(subject.commonName ?? key.name)
-                    .font(.headline)
-                if subject.hasCertificateDetails {
-                    if let organisation = subject.organisation {
-                        Text(organisation)
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                    }
-                    if let nationalIdentifier = subject.nationalIdentifier {
-                        Text("\(nationalIdentifier.label): \(nationalIdentifier.value)")
+                HStack(spacing: 6) {
+                    if shown.isLocked {
+                        Image(systemName: "lock.fill")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
                     }
-                } else {
-                    Text("Certificate details need the password to read")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Text(verbatim: shown.displayName(fallback: key.name))
+                        .font(.headline)
+                }
+                HStack(spacing: 8) {
+                    Text(shown.identity.isOrganisation ? "Organisation" : "Individual")
+                    if let identifier = shown.primaryIdentifier {
+                        Text(verbatim: "·")
+                        Text(identifier.label)
+                        Text(verbatim: identifier.value)
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                if shown.isLocked {
                     // Per key, per session, and only on request — never scanned automatically —
                     // matching the constraint `Engine.unlock_key` itself is built to (see its own
                     // doc comment in `crates/openimzo-ffi/src/engine.rs`).
-                    Button("Unlock…") { activeSheet = .unlock(key) }
+                    Button("Unlock to read the certificate…") { activeSheet = .unlock(key) }
                         .font(.caption)
                         .buttonStyle(.link)
                 }
@@ -117,18 +169,32 @@ private struct KeyRow: View {
             Spacer(minLength: 8)
 
             VStack(alignment: .trailing, spacing: 4) {
-                ValidityBadge(hasDetails: subject.hasCertificateDetails, expired: isExpired)
+                ValidityBadge(validity: shown.validity)
                     .font(.caption)
-                Text(key.disk)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                switch shown.validity {
+                case let .valid(days), let .expiringSoon(days):
+                    // `String(days)`, not a bare interpolation: a `LocalizedStringKey` needs a
+                    // `String` argument to reliably produce a `%@` catalogue placeholder.
+                    Text(days == 0 ? "Expires today" : "\(String(days)) days left")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                case .expired, .unknown:
+                    if !shown.validTo.isEmpty {
+                        Text(verbatim: shown.validTo)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             Menu {
                 Button("Change Password…") { activeSheet = .changePassword(key) }
-                Button(isPfx ? "Convert to YKS…" : "Convert to PFX…") { activeSheet = .convert(key) }
-                if isPfx {
+                Button(isPfxKey ? "Convert to YKS…" : "Convert to PFX…") { activeSheet = .convert(key) }
+                if isPfxKey {
                     Button("Export QR-key…") { activeSheet = .exportQrKey(key) }
+                    if shown.isLocked {
+                        Button("Unlock…") { activeSheet = .unlock(key) }
+                    }
                 }
                 Divider()
                 Button("Reveal in Finder") {
@@ -141,6 +207,110 @@ private struct KeyRow: View {
             .fixedSize()
         }
         .padding(.vertical, 4)
+    }
+}
+
+/// One label-and-value line in the detail panel. Left out entirely when the value is empty,
+/// rather than shown as a dash: a panel of twenty rows where half read "—" hides the six that
+/// say something.
+private struct DetailRow: View {
+    let label: LocalizedStringKey
+    let value: String
+    /// A second, dimmer line under the value — the OID an identifier came from, say.
+    var note: String?
+
+    var body: some View {
+        if !value.isEmpty {
+            LabeledContent {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(verbatim: value)
+                        .textSelection(.enabled)
+                    if let note, !note.isEmpty {
+                        Text(verbatim: note)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+            } label: {
+                Text(label)
+            }
+        }
+    }
+}
+
+/// The trailing inspector: everything known about the selected key, grouped the way someone
+/// checking a certificate reads it — who, which numbers, how long, with what, from where.
+struct KeyDetailPanel: View {
+    let key: KeyEntry
+    var coreEngine: CoreEngine
+    @Binding var activeSheet: KeysView.ActiveSheet?
+
+    var body: some View {
+        let shown = KeyPresentation(key, unlocked: coreEngine.unlockedSummary(for: key))
+        Form {
+            Section("Identity") {
+                DetailRow(label: "Name", value: shown.identity.commonName)
+                DetailRow(label: "Surname", value: shown.identity.surname)
+                DetailRow(label: "Given name", value: shown.identity.givenName)
+                DetailRow(label: "Organisation", value: shown.identity.organisation)
+                DetailRow(label: "Position", value: shown.identity.position)
+                DetailRow(label: "Country", value: shown.identity.country)
+            }
+
+            Section("Identifiers") {
+                DetailRow(label: "PINFL", value: shown.identity.pinfl, note: "1.2.860.3.16.1.2")
+                DetailRow(label: "Tax number (person)", value: shown.identity.tinIndividual, note: "UID")
+                DetailRow(label: "Tax number (organisation)", value: shown.identity.tinOrganisation, note: "1.2.860.3.16.1.1")
+                // Labelled apart from the certificate's serial number below on purpose: they are
+                // different numbers, and a DN attribute called SERIALNUMBER shown as "serial
+                // number" beside a certificate is exactly how they get confused.
+                DetailRow(label: "Subject serial", value: shown.identity.aliasSerialNumber, note: "SERIALNUMBER")
+                DetailRow(label: "Certificate serial", value: shown.serialNumber)
+            }
+
+            Section("Validity") {
+                DetailRow(label: "Valid from", value: shown.validFrom)
+                DetailRow(label: "Valid to", value: shown.validTo)
+                LabeledContent("Status") {
+                    HStack(spacing: 6) {
+                        ValidityBadge(validity: shown.validity)
+                        switch shown.validity {
+                        case let .valid(days), let .expiringSoon(days):
+                            Text(days == 0 ? "Expires today" : "\(String(days)) days left")
+                                .foregroundStyle(.secondary)
+                        case .expired, .unknown:
+                            EmptyView()
+                        }
+                    }
+                    .font(.callout)
+                }
+            }
+
+            Section("Cryptography") {
+                DetailRow(label: "Key algorithm", value: shown.publicKeyAlgName)
+                DetailRow(label: "Issuer", value: shown.issuerName)
+                DetailRow(label: "Subject", value: shown.subjectName)
+            }
+
+            Section("File") {
+                DetailRow(label: "Format", value: key.format)
+                DetailRow(label: "File name", value: key.name)
+                DetailRow(label: "Disk", value: key.disk)
+                DetailRow(label: "Full path", value: key.fullPath)
+            }
+
+            if shown.isLocked {
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("This key's certificate cannot be read without its password. What is shown above comes from the file's own alias.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Button("Unlock…") { activeSheet = .unlock(key) }
+                    }
+                }
+            }
+        }
+        .formStyle(.grouped)
     }
 }
 
@@ -392,6 +562,14 @@ struct KeysView: View {
     @State private var showingFolders = false
     @State private var selectedKeyPath: String?
     @State private var exportedQrData: Data?
+    @State private var showingDetails = true
+
+    /// The selected key, or `nil` — resolved from `coreEngine.keys` on every read rather than
+    /// held as a copy, so a rescan that changes a key's details updates the panel with it.
+    private var selectedKey: KeyEntry? {
+        guard let selectedKeyPath else { return nil }
+        return coreEngine.keys.first { $0.fullPath == selectedKeyPath }
+    }
 
     var body: some View {
         Group {
@@ -405,6 +583,23 @@ struct KeysView: View {
                 List(coreEngine.keys, id: \.fullPath, selection: $selectedKeyPath) { key in
                     KeyRow(key: key, coreEngine: coreEngine, activeSheet: $activeSheet)
                 }
+            }
+        }
+        // An inspector rather than a second split view: this screen already sits inside
+        // `MainWindow`'s own `NavigationSplitView`, and a third column that could not be put away
+        // would leave the list itself too narrow to read on a small window. An inspector
+        // collapses, and remembers nothing a person has to undo.
+        .inspector(isPresented: $showingDetails) {
+            if let selectedKey {
+                KeyDetailPanel(key: selectedKey, coreEngine: coreEngine, activeSheet: $activeSheet)
+                    .inspectorColumnWidth(min: 260, ideal: 320, max: 420)
+            } else {
+                ContentUnavailableView(
+                    "No Key Selected",
+                    systemImage: "sidebar.right",
+                    description: Text("Select a key in the list to see everything its file says about it.")
+                )
+                .inspectorColumnWidth(min: 260, ideal: 320, max: 420)
             }
         }
         // No `.navigationTitle` here: `MainWindow` sets the window's title bar itself, for all
@@ -430,6 +625,11 @@ struct KeysView: View {
                     // requirement) showed it does not inherit `\.locale` from its presenting
                     // view the way ordinary child views do, so it needs the override restated.
                     .environment(\.locale, locale)
+                }
+                Button {
+                    showingDetails.toggle()
+                } label: {
+                    Label("Details", systemImage: "sidebar.trailing")
                 }
             }
         }
@@ -485,8 +685,10 @@ struct KeysView: View {
         }
     }
 
+    /// The core already decided this from the file's extension (`KeyEntry.format`), so this asks
+    /// it rather than deciding again from the path and risking the two disagreeing.
     private func isPfx(_ key: KeyEntry) -> Bool {
-        key.fullPath.lowercased().hasSuffix(".pfx")
+        key.format == "PFX"
     }
 
     private func adoptPendingSelection() {
