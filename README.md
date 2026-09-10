@@ -67,7 +67,7 @@ xcodebuild -project macos/OpenImzo.xcodeproj -scheme OpenImzo -configuration Rel
 
 There is no separate setup step: a "Build the Rust core" phase runs `scripts/build-core.sh`
 before every build, so the first build compiles the Rust workspace and regenerates
-`macos/eimzoFFI.framework` and `macos/Generated/eimzo.swift` on its own. You can run
+`macos/openimzoFFI.framework` and `macos/Generated/openimzo.swift` on its own. You can run
 `scripts/build-core.sh release` directly too — the same script, useful outside Xcode (CI,
 or checking a release build's provenance) — but nothing about a normal build depends on
 having run it first.

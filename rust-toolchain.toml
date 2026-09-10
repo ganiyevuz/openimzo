@@ -6,7 +6,7 @@
 # with itself on one particular day. Bump this deliberately, the same way any
 # other dependency version bump would be reviewed.
 channel = "1.98.1"
-# Both architectures scripts/build-core.sh compiles for macos/eimzoFFI.framework's
+# Both architectures scripts/build-core.sh compiles for macos/openimzoFFI.framework's
 # universal binary. Listed here, not just installed by hand, so `rustup`
 # provisions both the first time anyone -- a contributor, or a CI runner --
 # builds against this pin, the same way it already provisions the compiler

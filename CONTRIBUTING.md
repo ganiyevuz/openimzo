@@ -40,7 +40,7 @@ actually verified against. Before opening a pull request:
 
 ## Changes to the cryptography
 
-`crates/eimzo-crypto/` gets more scrutiny than the rest of the tree, not less. If your
+`crates/openimzo-crypto/` gets more scrutiny than the rest of the tree, not less. If your
 change touches `ec.rs` or `gost3410.rs`, say explicitly in the PR description what
 stays constant-time and what doesn't, and read [`SECURITY.md`](SECURITY.md) first —
 it names the properties the current code claims and the ones it explicitly does not, and

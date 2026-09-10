@@ -1,6 +1,6 @@
 # Everything here is produced by scripts/build-core.sh, which is the source
 # of truth. A committed framework goes stale silently.
-eimzoFFI.framework/
+openimzoFFI.framework/
 Generated/
 build/
 DerivedData/

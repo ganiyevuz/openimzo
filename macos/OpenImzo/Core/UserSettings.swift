@@ -5,10 +5,10 @@ import Foundation
 /// `extraKeyFolders` backs `MacPlatform.volumesRoots()`: folders beyond `/Volumes` the person has
 /// added for key discovery (managed from `KeysView`'s folder list). It stays in `UserDefaults`
 /// rather than moving into `Engine.settings()`/`updateSettings()` because there is no matching
-/// field there to move it to — `Settings` (`crates/eimzo-ffi/src/types.rs`) only carries `lang`,
+/// field there to move it to — `Settings` (`crates/openimzo-ffi/src/types.rs`) only carries `lang`,
 /// `launchAtLogin`, `developerMode`, `rememberPasswords`, `askBeforeRandseed` and
 /// `keepActivityLog`, none of which is this. The core never reads this array itself either: per
-/// `build_discovery` (`crates/eimzo-ffi/src/engine.rs`), it calls `Platform.volumesRoots()` fresh
+/// `build_discovery` (`crates/openimzo-ffi/src/engine.rs`), it calls `Platform.volumesRoots()` fresh
 /// on every `listKeys`/`rescanKeys`, and `MacPlatform.volumesRoots()` reads straight from here —
 /// so this is purely a macOS-shell, `Platform`-layer detail, exactly the kind of thing
 /// `UserDefaults` is for, not a setting the core has any concept of. Defaults to empty, which
@@ -69,7 +69,7 @@ enum UserSettings {
     }
 
     /// The app's own chrome language (`AppLanguage`) — same reasoning as `extraKeyFolders`: the
-    /// core's `Settings` has no matching field, since `eimzo_rpc::i18n::Lang` only knows about
+    /// core's `Settings` has no matching field, since `openimzo_rpc::i18n::Lang` only knows about
     /// its own two languages, not this app's three-way chrome choice (see `AppLanguage`'s own
     /// doc comment). Defaults to Russian, matching the original's own default.
     static var appLanguage: AppLanguage {

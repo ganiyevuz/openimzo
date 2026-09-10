@@ -377,7 +377,7 @@ extension EngineError {
     /// A person-facing description, in the app's own chrome language. Uniffi's own
     /// `LocalizedError.errorDescription` for this type just reflects the Swift case name
     /// (`OpenImzo.EngineError.KeyFile`) — the message each case is documented with in
-    /// `crates/eimzo-ffi/src/types.rs` never crosses the FFI boundary, so it is restated here to
+    /// `crates/openimzo-ffi/src/types.rs` never crosses the FFI boundary, so it is restated here to
     /// match it, word for word, then localized.
     ///
     /// Takes `locale` explicitly rather than reading it from `@Environment` because this is a

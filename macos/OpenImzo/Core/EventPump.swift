@@ -48,7 +48,7 @@ final class EventPump {
     private func handle(_ event: Event) async {
         switch event {
         case .serverStateChanged, .tlsTrustChanged:
-            // Both events carry no detail by design (`crates/eimzo-ffi/src/events.rs`) — each is
+            // Both events carry no detail by design (`crates/openimzo-ffi/src/events.rs`) — each is
             // a nudge to re-query `status()` for the fresh value.
             await coreEngine.refreshStatus()
         case .keysChanged:
@@ -138,7 +138,7 @@ final class ActivityStore {
 /// `~/Library/Logs/OpenImzo/`, always — independent of `Settings.keepActivityLog`, which
 /// only governs whether these lines also show up in the Activity view (`CoreEngine
 /// .appendLogLine`). `EngineConfig.logsDir` tells the core where this directory is, but nothing
-/// in `crates/eimzo-ffi` actually writes a file there — `Event.log` is the only channel these
+/// in `crates/openimzo-ffi` actually writes a file there — `Event.log` is the only channel these
 /// lines travel over, so if the shell doesn't write them down, "open the logs directory" (the
 /// About screen's own action) would always open an empty folder. Lines are already formatted by
 /// `tracing` with their own timestamp and level, so this only ever appends them verbatim plus a
@@ -163,7 +163,7 @@ final class LogFileWriter {
 }
 
 /// `ActivityEntry`'s four fields are all `String`, so this is a plain, lossless mirror of what
-/// `crates/eimzo-ffi/src/types.rs` sends across — needed only so `ActivityStore` can read and
+/// `crates/openimzo-ffi/src/types.rs` sends across — needed only so `ActivityStore` can read and
 /// write it as JSON; uniffi's own generated type has no reason to carry that conformance itself.
 /// Written by hand rather than `: Codable {}`: automatic synthesis only applies within the file
 /// that declares the type, and `ActivityEntry` is declared in the generated bindings, not here.

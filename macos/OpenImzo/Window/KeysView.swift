@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 /// A pragmatic reader for the BouncyCastle-style DN string `KeyEntry.subjectName` carries —
-/// `CN=Test User,O=Org,C=UZ,1.2.860.3.16.1.2=123,SERIALNUMBER=X`, per `crates/eimzo-pki/src/dn.rs`
+/// `CN=Test User,O=Org,C=UZ,1.2.860.3.16.1.2=123,SERIALNUMBER=X`, per `crates/openimzo-pki/src/dn.rs`
 /// — good enough for the handful of attributes this view shows. Not a general X.500 parser, and
 /// never used for anything security-relevant: `KeyEntry.subjectName` itself is display-only,
 /// same as everywhere else this app shows it.
@@ -10,7 +10,7 @@ import SwiftUI
 /// `KeyEntry` carries no separate "national identifier" or "organisation" field (only the raw
 /// subject DN) — the design spec's own bullet lists those as things the Keys view should show,
 /// so this is what turns the one string the core actually gives into them. The Uzbek PKI OID arc
-/// `1.2.860.3.16.1.x` has no symbolic name in `crates/eimzo-pki/src/dn.rs`'s own `SYMBOLS` table
+/// `1.2.860.3.16.1.x` has no symbolic name in `crates/openimzo-pki/src/dn.rs`'s own `SYMBOLS` table
 /// (it stays numeric, matching the original BouncyCastle-based client's own output) —
 /// `1.2.860.3.16.1.1` is INN (legal entities), `1.2.860.3.16.1.2` is PINFL (individuals), the
 /// standard pair of national identifiers used across Uzbek digital-signature certificates.
@@ -20,7 +20,7 @@ private struct KeySubjectInfo {
     let nationalIdentifier: (label: String, value: String)?
     /// `false` for a PFX whose password hasn't been given yet — `Discovery` can't read a PFX's
     /// certificate without it, so every field above is empty for those (see `KeyEntry.disk`'s
-    /// sibling doc comment in `crates/eimzo-ffi/src/engine.rs`) — unless `unlocked` supplies the
+    /// sibling doc comment in `crates/openimzo-ffi/src/engine.rs`) — unless `unlocked` supplies the
     /// summary `CoreEngine.unlockKey(_:password:)` already fetched for this row this session.
     let hasCertificateDetails: Bool
 
@@ -106,7 +106,7 @@ private struct KeyRow: View {
                         .foregroundStyle(.secondary)
                     // Per key, per session, and only on request — never scanned automatically —
                     // matching the constraint `Engine.unlock_key` itself is built to (see its own
-                    // doc comment in `crates/eimzo-ffi/src/engine.rs`).
+                    // doc comment in `crates/openimzo-ffi/src/engine.rs`).
                     Button("Unlock…") { activeSheet = .unlock(key) }
                         .font(.caption)
                         .buttonStyle(.link)

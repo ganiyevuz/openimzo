@@ -49,8 +49,8 @@ read all of it.
 
 ## The cryptography: what was done, and what it does not establish
 
-The elliptic-curve signing path (`crates/eimzo-crypto/src/ec.rs`,
-`crates/eimzo-crypto/src/gost3410.rs`) was rewritten from textbook variable-time
+The elliptic-curve signing path (`crates/openimzo-crypto/src/ec.rs`,
+`crates/openimzo-crypto/src/gost3410.rs`) was rewritten from textbook variable-time
 double-and-add over `num-bigint` to a fixed-iteration Montgomery ladder over
 `crypto-bigint`'s constant-width arithmetic, specifically because the original approach
 leaked the secret scalar's bit length and bit pattern through timing — and the two
@@ -137,7 +137,7 @@ scrubbed, and that scrubbing has been checked, not just written.
 If any of the above is wrong, out of date, or you can defeat one of the properties it
 claims, that is exactly the report we want.
 
-**Secret-derived comparisons outside `ec.rs`.** Two checks elsewhere in `eimzo-pki`
+**Secret-derived comparisons outside `ec.rs`.** Two checks elsewhere in `openimzo-pki`
 compare a value derived from a user-supplied password against a value read from an
 untrusted key file: the PKCS#12 integrity MAC (`pkcs12/pbe.rs`) and the YTKS-2
 password-check digest (`ytks.rs`). Both use `subtle::ConstantTimeEq` rather than the

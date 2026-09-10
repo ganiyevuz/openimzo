@@ -215,7 +215,7 @@ struct WindowKeyObserver: NSViewRepresentable {
 }
 
 /// A `mm:ss`-style countdown to `deadline`, ticking once a second. Purely a display: the actual
-/// timeout is enforced by the core (`eimzo_rpc::ui::UiBroker`), which calls
+/// timeout is enforced by the core (`openimzo_rpc::ui::UiBroker`), which calls
 /// `UiDelegate.cancel(requestId:)` when it passes — this label only shows how much time is left
 /// before that happens.
 struct CountdownLabel: View {

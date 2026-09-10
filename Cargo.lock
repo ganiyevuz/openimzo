@@ -600,181 +600,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "eimzo-cli"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "base64",
- "chrono",
- "clap",
- "der",
- "eimzo-crypto",
- "eimzo-keys",
- "eimzo-pki",
- "eimzo-rpc",
- "eimzo-server",
- "hex",
- "hostname",
- "if-addrs",
- "rand_core 0.6.4",
- "serde_json",
- "tokio",
- "x509-cert",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-crypto"
-version = "0.1.0"
-dependencies = [
- "const-oid",
- "crypto-bigint",
- "der",
- "hex",
- "num-bigint",
- "num-integer",
- "num-traits",
- "pkcs8",
- "rand_core 0.6.4",
- "spki",
- "thiserror 1.0.69",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-ffi"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "chrono",
- "eimzo-crypto",
- "eimzo-keys",
- "eimzo-pki",
- "eimzo-rpc",
- "eimzo-server",
- "hex",
- "parking_lot",
- "rand 0.8.8",
- "rand_core 0.6.4",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "uniffi",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-keys"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "eimzo-crypto",
- "eimzo-pki",
- "hex",
- "parking_lot",
- "rand 0.8.8",
- "serde",
- "thiserror 1.0.69",
- "tracing",
- "x509-cert",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-pki"
-version = "0.1.0"
-dependencies = [
- "base64",
- "cbc",
- "chrono",
- "cipher",
- "cms",
- "const-oid",
- "der",
- "des",
- "eimzo-crypto",
- "hex",
- "hmac",
- "num-bigint",
- "pkcs12",
- "pkcs5",
- "pkcs8",
- "rand_core 0.6.4",
- "rc2",
- "serde",
- "serde_json",
- "sha1",
- "sha2",
- "spki",
- "subtle",
- "thiserror 1.0.69",
- "x509-cert",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-rpc"
-version = "0.1.0"
-dependencies = [
- "aes",
- "async-trait",
- "base64",
- "chrono",
- "cipher",
- "const-oid",
- "der",
- "ecb",
- "eimzo-crypto",
- "eimzo-keys",
- "eimzo-pki",
- "hex",
- "parking_lot",
- "rand 0.8.8",
- "rand_core 0.6.4",
- "reqwest",
- "rsa",
- "serde",
- "serde_json",
- "sha2",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "x509-cert",
- "zeroize",
-]
-
-[[package]]
-name = "eimzo-server"
-version = "0.1.0"
-dependencies = [
- "axum",
- "eimzo-keys",
- "eimzo-rpc",
- "futures-util",
- "hyper",
- "hyper-util",
- "mime_guess",
- "parking_lot",
- "rcgen",
- "reqwest",
- "rustls",
- "rustls-pemfile",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "time",
- "tokio",
- "tokio-rustls",
- "tower",
- "tracing",
- "zeroize",
-]
-
-[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1460,6 +1285,181 @@ name = "once_cell_polyfill"
 version = "1.70.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
+
+[[package]]
+name = "openimzo-cli"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "base64",
+ "chrono",
+ "clap",
+ "der",
+ "hex",
+ "hostname",
+ "if-addrs",
+ "openimzo-crypto",
+ "openimzo-keys",
+ "openimzo-pki",
+ "openimzo-rpc",
+ "openimzo-server",
+ "rand_core 0.6.4",
+ "serde_json",
+ "tokio",
+ "x509-cert",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-crypto"
+version = "0.1.0"
+dependencies = [
+ "const-oid",
+ "crypto-bigint",
+ "der",
+ "hex",
+ "num-bigint",
+ "num-integer",
+ "num-traits",
+ "pkcs8",
+ "rand_core 0.6.4",
+ "spki",
+ "thiserror 1.0.69",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-ffi"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "hex",
+ "openimzo-crypto",
+ "openimzo-keys",
+ "openimzo-pki",
+ "openimzo-rpc",
+ "openimzo-server",
+ "parking_lot",
+ "rand 0.8.8",
+ "rand_core 0.6.4",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "uniffi",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-keys"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "hex",
+ "openimzo-crypto",
+ "openimzo-pki",
+ "parking_lot",
+ "rand 0.8.8",
+ "serde",
+ "thiserror 1.0.69",
+ "tracing",
+ "x509-cert",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-pki"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "cbc",
+ "chrono",
+ "cipher",
+ "cms",
+ "const-oid",
+ "der",
+ "des",
+ "hex",
+ "hmac",
+ "num-bigint",
+ "openimzo-crypto",
+ "pkcs12",
+ "pkcs5",
+ "pkcs8",
+ "rand_core 0.6.4",
+ "rc2",
+ "serde",
+ "serde_json",
+ "sha1",
+ "sha2",
+ "spki",
+ "subtle",
+ "thiserror 1.0.69",
+ "x509-cert",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-rpc"
+version = "0.1.0"
+dependencies = [
+ "aes",
+ "async-trait",
+ "base64",
+ "chrono",
+ "cipher",
+ "const-oid",
+ "der",
+ "ecb",
+ "hex",
+ "openimzo-crypto",
+ "openimzo-keys",
+ "openimzo-pki",
+ "parking_lot",
+ "rand 0.8.8",
+ "rand_core 0.6.4",
+ "reqwest",
+ "rsa",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "x509-cert",
+ "zeroize",
+]
+
+[[package]]
+name = "openimzo-server"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "futures-util",
+ "hyper",
+ "hyper-util",
+ "mime_guess",
+ "openimzo-keys",
+ "openimzo-rpc",
+ "parking_lot",
+ "rcgen",
+ "reqwest",
+ "rustls",
+ "rustls-pemfile",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "time",
+ "tokio",
+ "tokio-rustls",
+ "tower",
+ "tracing",
+ "zeroize",
+]
 
 [[package]]
 name = "openssl-probe"

@@ -6,7 +6,7 @@ import Foundation
 /// replacing `InterimPlatform`.
 ///
 /// Named `MacPlatform` rather than the brief's suggested `PlatformImpl`
-/// deliberately: uniffi's own generated bindings (`macos/Generated/eimzo.swift`)
+/// deliberately: uniffi's own generated bindings (`macos/Generated/openimzo.swift`)
 /// already declare `open class PlatformImpl: Platform` as its FFI wrapper for
 /// the trait (the type `FfiConverterTypePlatform.lift` produces from a raw
 /// Rust pointer), so that exact name is reserved and would fail to compile
@@ -26,7 +26,7 @@ final class MacPlatform: Platform {
     /// screen exists to populate it, which turns this into exactly
     /// `["/Volumes"]`, matching the brief. The core treats this method's
     /// first entry as the volumes root and every further one as an extra
-    /// folder (`build_discovery` in `crates/eimzo-ffi/src/engine.rs`), so
+    /// folder (`build_discovery` in `crates/openimzo-ffi/src/engine.rs`), so
     /// `/Volumes` must stay first.
     func volumesRoots() -> [String] {
         ["/Volumes"] + UserSettings.extraKeyFolders
@@ -80,8 +80,8 @@ final class MacPlatform: Platform {
 
     /// The hostname plus every up, non-loopback interface's name and numeric address, gathered
     /// directly with the POSIX `getifaddrs()` call — what `randseed.get`
-    /// (`crates/eimzo-rpc/src/plugins/randseed.rs`) packages as this machine's fingerprint,
-    /// through `PlatformRandseedProvider` in `crates/eimzo-ffi/src/delegate.rs`. `eimzo-cli`
+    /// (`crates/openimzo-rpc/src/plugins/randseed.rs`) packages as this machine's fingerprint,
+    /// through `PlatformRandseedProvider` in `crates/openimzo-ffi/src/delegate.rs`. `openimzo-cli`
     /// gathers the same kind of information for the same trait with the `if-addrs`/`hostname`
     /// crates instead, since it has no shell to ask — see that adapter's own doc comment for why
     /// the two are deliberately not the same code. The exact byte layout here is this method's

@@ -544,7 +544,7 @@ private struct ImportStepView: View {
     /// Applies the language and folder immediately — neither needs the engine's own WebSocket
     /// listener — then, if there are any API keys, re-verifies each one in turn. One connection
     /// per pair, never the bulk `apikey domain,key,domain,key,…` form: the core's own handler
-    /// (`main_::apikey` in `eimzo-rpc`) aborts the whole call at the first pair that fails to
+    /// (`main_::apikey` in `openimzo-rpc`) aborts the whole call at the first pair that fails to
     /// verify, which would silently skip every entry listed after a single bad one — exactly the
     /// failure this import must not have.
     ///
@@ -646,7 +646,7 @@ enum PreferencesImporter {
             guard isRegularFile(liveURL) else { continue }
             guard let copyURL = copyToThrowawayLocation(liveURL) else { continue }
             defer { try? FileManager.default.removeItem(at: copyURL) }
-            guard let top = readPlistDictionary(copyURL), let root = eimzoRoot(in: top) else { continue }
+            guard let top = readPlistDictionary(copyURL), let root = legacyRoot(in: top) else { continue }
             let imported = extract(from: root)
             if !imported.isEmpty { return imported }
         }
@@ -694,7 +694,7 @@ enum PreferencesImporter {
     /// stores it under one key holding the whole absolute path; the shared file decomposes the
     /// same path one segment at a time from its own `"/"` root (that file's own top-level
     /// `java.util.prefs` "user root", shared by every Java process that lands in it).
-    private static func eimzoRoot(in top: [String: Any]) -> [String: Any]? {
+    private static func legacyRoot(in top: [String: Any]) -> [String: Any]? {
         if let dedicated = top["/uz/yt/eimzo/"] as? [String: Any] {
             return dedicated
         }
@@ -702,8 +702,8 @@ enum PreferencesImporter {
         return descend(sharedRoot, ["uz", "yt", "eimzo"])
     }
 
-    private static func extract(from eimzoRoot: [String: Any]) -> ImportedPreferences {
-        guard let server = descend(eimzoRoot, ["websocket", "server"]) else {
+    private static func extract(from legacyRoot: [String: Any]) -> ImportedPreferences {
+        guard let server = descend(legacyRoot, ["websocket", "server"]) else {
             return ImportedPreferences(lang: nil, pfxSearchFolder: nil, apiKeys: [])
         }
         let lang = server["lang"] as? String
@@ -717,7 +717,7 @@ enum PreferencesImporter {
 
 /// Re-verifies one `(domain, apikey)` pair the exact way a real website would: a single `apikey`
 /// RPC call over this engine's own plain WebSocket listener (`EngineStatus.wsPort`) — the one
-/// place the core's real signature check (`eimzo_crypto::apikey::verify_domain`, reached through
+/// place the core's real signature check (`openimzo_crypto::apikey::verify_domain`, reached through
 /// `ApikeyService::register`) actually runs. A verified pair is cached and persisted by the core
 /// itself as a side effect of this same call (`sites.json`), exactly as it would be for a real
 /// site's own `apikey` call, so there is nothing further this app needs to persist on success.

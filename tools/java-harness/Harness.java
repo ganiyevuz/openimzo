@@ -18,7 +18,7 @@ import uz.yt.cams.us.common.pki.dto.Pkcs7Info;
 import uz.yt.cams.us.common.pki.dto.Pkcs7SignerInfo;
 import uz.yt.pkix.jcajce.provider.YTProvider;
 
-/** Cross-checks E-IMZO Renewed output with the ORIGINAL E-IMZO 6.4.7 libraries. */
+/** Cross-checks OpenImzo output with the ORIGINAL E-IMZO 6.4.7 libraries. */
 public class Harness {
     static BouncyCastleProvider bcp;
 

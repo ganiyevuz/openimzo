@@ -9,8 +9,8 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-CRATE=eimzo-ffi
-LIB=libeimzo_ffi.a
+CRATE=openimzo-ffi
+LIB=libopenimzo_ffi.a
 OUT=macos
 GEN="$OUT/Generated"
 PROFILE="${1:-release}"
@@ -84,19 +84,19 @@ lipo -create \
   "target/x86_64-apple-darwin/$TARGET_DIR/$LIB" \
   -output "$UNIVERSAL_DIR/$LIB"
 
-# Named `eimzoFFI`, matching the module UniFFI's generated Swift binds to
-# (`import eimzoFFI` in Generated/eimzo.swift): Clang resolves `import
+# Named `openimzoFFI`, matching the module UniFFI's generated Swift binds to
+# (`import openimzoFFI` in Generated/openimzo.swift): Clang resolves `import
 # <Name>` for a framework by looking for `<Name>.framework` directly, then
 # reading whatever module its module map declares inside -- the framework's
 # own directory (and binary) name has to match the import, independent of
 # the module name in the modulemap, but keeping all three the same avoids
 # carrying two names for one thing.
 echo "==> assembling the framework"
-FRAMEWORK="$OUT/eimzoFFI.framework"
+FRAMEWORK="$OUT/openimzoFFI.framework"
 rm -rf "$FRAMEWORK"
 mkdir -p "$FRAMEWORK/Headers" "$FRAMEWORK/Modules"
 cp "$GEN"/*.h "$FRAMEWORK/Headers/"
-cp "$UNIVERSAL_DIR/$LIB" "$FRAMEWORK/eimzoFFI"
+cp "$UNIVERSAL_DIR/$LIB" "$FRAMEWORK/openimzoFFI"
 
 # Inside a framework's own module map, an unqualified `header` name resolves
 # against that framework's Headers/ directory, so the `framework module`
@@ -107,4 +107,4 @@ sed 's/^module /framework module /' "$GEN/module.modulemap" > "$FRAMEWORK/Module
 
 echo "==> done"
 echo "    framework: $FRAMEWORK"
-echo "    bindings:  $GEN/eimzo.swift"
+echo "    bindings:  $GEN/openimzo.swift"

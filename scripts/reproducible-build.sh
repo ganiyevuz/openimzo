@@ -143,7 +143,7 @@ export MACOSX_DEPLOYMENT_TARGET=14.0
 # Verified against this project's own framework: `nm -a` on a plain
 # `xcodebuild ... build` of an unmodified checkout showed 55 `OSO` entries,
 # every one naming this checkout's own absolute path
-# (.../eimzoFFI.framework/eimzoFFI); a second checkout in a differently-named
+# (.../openimzoFFI.framework/openimzoFFI); a second checkout in a differently-named
 # directory produced the same 55 entries under its own path instead. Building
 # both from the same fixed path, as below, removed the difference.
 #
@@ -166,7 +166,7 @@ rsync -a \
   --exclude .git \
   --exclude target \
   --exclude macos/Generated \
-  --exclude macos/eimzoFFI.framework \
+  --exclude macos/openimzoFFI.framework \
   --exclude 'macos/*.xcodeproj/xcuserdata' \
   --exclude 'macos/*.xcodeproj/project.xcworkspace/xcuserdata' \
   --exclude dist \

@@ -16,15 +16,15 @@
 		378AEA60FABFF69FB8C5ED68 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883CB300DD91BB7AEC6E336 /* UserSettings.swift */; };
 		46525B31E81FE74D9B34F41A /* MacUiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD6AF3819FC672577D8C57F /* MacUiDelegate.swift */; };
 		48C0FC687CC6CB41CC3400AF /* EventPump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0F458F419F0CC09C7A1D56 /* EventPump.swift */; };
-		48E5697F4A036C62292499E1 /* eimzoFFI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E145A070B3E913FD352FCD68 /* eimzoFFI.framework */; };
 		51DD14EAC0C98C9B0B8237F7 /* AppDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */; };
 		6BFD6378E05B4B94621D51BC /* FirstRunFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D979EB4E333DA1EFA2952F /* FirstRunFlow.swift */; };
 		817E177D3F951BD13D1280F5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC28C4A5A4331816850F0A6D /* SettingsView.swift */; };
-		86D4841C3390AA2BC8E6C963 /* eimzo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211C0B9221D9BD29D128626 /* eimzo.swift */; };
 		8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE38D338AA8A2760370AED /* TrustInstaller.swift */; };
 		89D6CB4F5E17645B9C9892FB /* NewPfxPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A14A0ED3BCF8159EFACAEC6 /* NewPfxPanel.swift */; };
 		94799042F4F039CF896E595F /* TCPProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DBB6485F82F013FF6064E /* TCPProbe.swift */; };
 		AC76A2750AFCE64EE57FC52A /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD39C98077A45CE20AF06B /* MainWindow.swift */; };
+		AF3DEBC26EF07A3177A24764 /* openimzo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4425B991926AFB06BD194F64 /* openimzo.swift */; };
+		B15183FA6A640EC120A7C524 /* openimzoFFI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B14E3EA10185A8124C50EF7 /* openimzoFFI.framework */; };
 		B16E2965204B9E6D4C93FFB1 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EB12B5D3D165FC395957EC /* AppLanguage.swift */; };
 		B813FBFA44C6B818316D2373 /* PermissionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */; };
 		BD736DD8D6D23DE46825778C /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA7A38478BB8FBEB1CCA0AF /* MenuBarContent.swift */; };
@@ -44,13 +44,14 @@
 		2DBDFF8EAEF5D36691E839AC /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		3883CB300DD91BB7AEC6E336 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		3A8983FC74E0CF17B1BD5376 /* CoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreEngine.swift; sourceTree = "<group>"; };
+		4425B991926AFB06BD194F64 /* openimzo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = openimzo.swift; sourceTree = "<group>"; };
 		46BD39C98077A45CE20AF06B /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		47EB12B5D3D165FC395957EC /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
-		5211C0B9221D9BD29D128626 /* eimzo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eimzo.swift; sourceTree = "<group>"; };
 		5383028CE76367D1E12A5F85 /* PasswordPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPanel.swift; sourceTree = "<group>"; };
 		590D2A91A3EDC2D539B4481C /* AppIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdentity.swift; sourceTree = "<group>"; };
 		6AFDD9FE2A2E4BA6074FFEFE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		6B0F458F419F0CC09C7A1D56 /* EventPump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPump.swift; sourceTree = "<group>"; };
+		6B14E3EA10185A8124C50EF7 /* openimzoFFI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openimzoFFI.framework; sourceTree = "<group>"; };
 		7C21CD81BDE909A3CE5EE328 /* OpenImzo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenImzo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F9C3E1FB6D6037B032CA5E /* ConfirmPanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPanels.swift; sourceTree = "<group>"; };
 		89474E6D1011188D7D76172B /* SitesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitesView.swift; sourceTree = "<group>"; };
@@ -61,7 +62,6 @@
 		AE2AA9620819B77633CB2BAF /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
 		D0B3BACEE744E2891313F7D2 /* OpenImzoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenImzoApp.swift; sourceTree = "<group>"; };
 		DD0D9764D02497877FB12D49 /* MacPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPlatform.swift; sourceTree = "<group>"; };
-		E145A070B3E913FD352FCD68 /* eimzoFFI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = eimzoFFI.framework; sourceTree = "<group>"; };
 		E4B2453254D8B47F64B68DF7 /* PermissionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPanel.swift; sourceTree = "<group>"; };
 		FAB91E9229CB74BB094FF90C /* RequestPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPanel.swift; sourceTree = "<group>"; };
 		FF4646D8A8ED6E05E58D5580 /* AppDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDirectories.swift; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48E5697F4A036C62292499E1 /* eimzoFFI.framework in Frameworks */,
+				B15183FA6A640EC120A7C524 /* openimzoFFI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +111,7 @@
 		4CB8254F28C4EAF0A59D5B8B /* Generated */ = {
 			isa = PBXGroup;
 			children = (
-				5211C0B9221D9BD29D128626 /* eimzo.swift */,
+				4425B991926AFB06BD194F64 /* openimzo.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -133,7 +133,7 @@
 		91DB3B04A2E5C60C5BAE606B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E145A070B3E913FD352FCD68 /* eimzoFFI.framework */,
+				6B14E3EA10185A8124C50EF7 /* openimzoFFI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -269,7 +269,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Generated/eimzo.swift",
+				"$(SRCROOT)/Generated/openimzo.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -306,7 +306,7 @@
 				94799042F4F039CF896E595F /* TCPProbe.swift in Sources */,
 				8968BC73905EF11B9AEF5E01 /* TrustInstaller.swift in Sources */,
 				378AEA60FABFF69FB8C5ED68 /* UserSettings.swift in Sources */,
-				86D4841C3390AA2BC8E6C963 /* eimzo.swift in Sources */,
+				AF3DEBC26EF07A3177A24764 /* openimzo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

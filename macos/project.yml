@@ -11,7 +11,7 @@ settings:
     # The Swift *toolchain* here is 6.4 either way (Xcode 27 beta); this pins the
     # target's *language mode* to 5, not 6. Swift 6 language mode's strict
     # concurrency checking rejects uniffi 0.28's own generated bindings
-    # (macos/Generated/eimzo.swift) as written -- e.g. its global handle-map
+    # (macos/Generated/openimzo.swift) as written -- e.g. its global handle-map
     # caches aren't Sendable-annotated -- and that file is regenerated fresh by
     # scripts/build-core.sh on every build, so it cannot be patched here even
     # temporarily. Swift 5 mode still runs on the same 6.4 compiler.
@@ -28,8 +28,8 @@ targets:
       - path: OpenImzo
         excludes:
           - "Info.plist"
-      - path: Generated/eimzo.swift
-        name: eimzo.swift
+      - path: Generated/openimzo.swift
+        name: openimzo.swift
     settings:
       base:
         PRODUCT_NAME: "OpenImzo"
@@ -57,13 +57,13 @@ targets:
       # Xcode only needs it to exist once the link step actually runs, which
       # is after the prebuild script phase below has already created it.
       #
-      # Named `eimzoFFI`, matching the module UniFFI's generated Swift binds
-      # to (`import eimzoFFI` in macos/Generated/eimzo.swift): Clang resolves
+      # Named `openimzoFFI`, matching the module UniFFI's generated Swift binds
+      # to (`import openimzoFFI` in macos/Generated/openimzo.swift): Clang resolves
       # `import <Name>` for a framework by looking for `<Name>.framework`
       # directly, then reading whatever module its module map declares --
       # the framework's own directory name has to match the import, the
       # module name declared inside is what it uses once found.
-      - framework: eimzoFFI.framework
+      - framework: openimzoFFI.framework
         embed: false
     prebuildScripts:
       - name: Build the Rust core
@@ -75,7 +75,7 @@ targets:
           esac
           "$SRCROOT/../scripts/build-core.sh" "$PROFILE"
         basedOnDependencyAnalysis: false
-        # On a fresh clone, Generated/eimzo.swift doesn't exist yet, and it's
+        # On a fresh clone, Generated/openimzo.swift doesn't exist yet, and it's
         # listed directly as a source file above (a plain path, not a
         # generated-files pattern Xcode can infer). Without an explicit
         # output here, the build system validates every Compile Sources
@@ -85,4 +85,4 @@ targets:
         # as this phase's output tells the build system the file is produced
         # here, so that check is deferred until after the script has run.
         outputFiles:
-          - $(SRCROOT)/Generated/eimzo.swift
+          - $(SRCROOT)/Generated/openimzo.swift

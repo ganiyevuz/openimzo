@@ -1,13 +1,13 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/eimzo-crypto",
-    "crates/eimzo-pki",
-    "crates/eimzo-cli",
-    "crates/eimzo-keys",
-    "crates/eimzo-rpc",
-    "crates/eimzo-server",
-    "crates/eimzo-ffi",
+    "crates/openimzo-crypto",
+    "crates/openimzo-pki",
+    "crates/openimzo-cli",
+    "crates/openimzo-keys",
+    "crates/openimzo-rpc",
+    "crates/openimzo-server",
+    "crates/openimzo-ffi",
 ]
 
 [workspace.package]
@@ -25,12 +25,12 @@ pkcs12 = { version = "0.1", features = ["kdf"] }
 pkcs5 = { version = "0.7", features = ["alloc", "pbes2"] }
 const-oid = { version = "0.9", features = ["db"] }
 num-bigint = "0.4"
-# Fixed-width, constant-time-oriented big integers. Only `eimzo-crypto`'s `ec`
+# Fixed-width, constant-time-oriented big integers. Only `openimzo-crypto`'s `ec`
 # module needs them, for the scalar arithmetic that carries the nonce and the
 # private key; `num-bigint` stays for everything else in the workspace.
 crypto-bigint = { version = "0.5", default-features = false, features = ["alloc", "zeroize"] }
 # Already compiled into the graph transitively via crypto-bigint; declared directly
-# here so `eimzo-pki` can do constant-time equality on secret-derived MACs and digest
+# here so `openimzo-pki` can do constant-time equality on secret-derived MACs and digest
 # checks without a version its own resolution could ever disagree with.
 subtle = "2"
 num-traits = "0.2"

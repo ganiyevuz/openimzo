@@ -42,7 +42,7 @@ struct PasswordPanelView: View {
 
                 // `request.error` is treated as a boolean, not displayed — per task 6's
                 // controller addendum, this is the one core-sourced string that reaches a
-                // panel (`crates/eimzo-rpc/src/plugins/keystore.rs`'s
+                // panel (`crates/openimzo-rpc/src/plugins/keystore.rs`'s
                 // `key.password.is.incorrect.or.key.file.is.corrupted`, in whichever of the
                 // core's own two languages it's currently running in). `error != nil` means only
                 // "the previous attempt was rejected"; the message shown is this app's own,

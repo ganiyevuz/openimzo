@@ -7,7 +7,7 @@ import os
 /// moment it opens — and never answer on the person's behalf.
 ///
 /// Named `MacUiDelegate` rather than the brief's suggested `UiDelegateImpl`, for the same reason
-/// `MacPlatform` (Task 3) isn't `PlatformImpl`: `macos/Generated/eimzo.swift` already declares
+/// `MacPlatform` (Task 3) isn't `PlatformImpl`: `macos/Generated/openimzo.swift` already declares
 /// `open class UiDelegateImpl: UiDelegate` as uniffi's own FFI wrapper for the trait, so that
 /// exact name is reserved and would fail to compile as a redeclaration.
 @MainActor
@@ -30,7 +30,7 @@ final class MacUiDelegate: UiDelegate {
     private let logger = Logger(subsystem: "io.github.ganiyevuz.openimzo", category: "ui")
 
     /// The one panel currently on screen, if any. The core only ever asks for one at a time
-    /// (`eimzo_rpc::ui::UiBroker` serializes every request), so this app does not build a queue
+    /// (`openimzo_rpc::ui::UiBroker` serializes every request), so this app does not build a queue
     /// on top of that — there is never more than one entry here.
     private var activePanel: (any CancellableRequestPanel)?
 

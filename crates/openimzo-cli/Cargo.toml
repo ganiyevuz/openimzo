@@ -1,0 +1,30 @@
+[package]
+name = "openimzo-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Developer CLI for the OpenImzo core"
+
+[[bin]]
+name = "openimzo-cli"
+path = "src/main.rs"
+
+[dependencies]
+openimzo-crypto = { path = "../openimzo-crypto" }
+openimzo-pki = { path = "../openimzo-pki" }
+openimzo-keys = { path = "../openimzo-keys" }
+openimzo-rpc = { path = "../openimzo-rpc" }
+openimzo-server = { path = "../openimzo-server" }
+clap.workspace = true
+hex.workspace = true
+base64.workspace = true
+serde_json.workspace = true
+rand_core.workspace = true
+chrono.workspace = true
+x509-cert.workspace = true
+der.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+zeroize.workspace = true
+if-addrs.workspace = true
+hostname.workspace = true

@@ -2,7 +2,7 @@ import Foundation
 
 /// The app's own chrome language — the menu bar, the window, Settings, and the five request
 /// panels. Deliberately a different type from the core's own `Settings.lang`
-/// (`eimzo_rpc::i18n::Lang`, `Ru`/`Uz` only): this one has three cases, because the person using
+/// (`openimzo_rpc::i18n::Lang`, `Ru`/`Uz` only): this one has three cases, because the person using
 /// the app and the websites it talks to are not the same audience — see
 /// `CoreEngine.setAppLanguage(_:)`, which keeps the two from ever disagreeing about what "Uzbek"
 /// or "Russian" means, without ever handing the core a language it doesn't have.
@@ -15,7 +15,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// language is currently selected, the way a language picker never translates "Русский" to
     /// "Russian" just because English is active. `ru`/`uz` are the two languages the core
     /// itself carries, spelled here exactly as it spells them — «Русский» / «O'zbekcha»,
-    /// matching `crates/eimzo-rpc/resources/messages_ru.properties`'s `russian`/`uzbek`
+    /// matching `crates/openimzo-rpc/resources/messages_ru.properties`'s `russian`/`uzbek`
     /// keys — so the same two words appear in both halves of this app. English is the app's
     /// own: the core has no counterpart for it, which is why `AppLanguage` and the core's
     /// own two-case `Lang` are separate types.
@@ -34,7 +34,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     var locale: Locale { Locale(identifier: rawValue) }
 
     /// What this chrome language tells the core through `Settings.lang`, via
-    /// `Engine.updateSettings(_:)`. The core's `eimzo_rpc::i18n::Lang` parses only `"ru"`/`"uz"`
+    /// `Engine.updateSettings(_:)`. The core's `openimzo_rpc::i18n::Lang` parses only `"ru"`/`"uz"`
     /// — task 6's controller addendum is explicit that adding English there would change what a
     /// website sees, which this task must not do — so English chrome leaves the core on its own
     /// Russian default rather than being given a language it has no third option for.

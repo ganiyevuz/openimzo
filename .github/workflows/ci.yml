@@ -55,7 +55,7 @@ jobs:
       # suite: GOST hash, cipher and signature primitives checked against known
       # answers before anything else is trusted.
       - name: Crypto self-test
-        run: cargo run --release -p eimzo-cli -- selftest
+        run: cargo run --release -p openimzo-cli -- selftest
 
   app:
     name: macOS app — clean build
