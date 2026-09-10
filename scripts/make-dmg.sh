@@ -42,6 +42,20 @@ trap 'rm -rf "$STAGE" "${OUT%.dmg}.rw.dmg"' EXIT
 cp -R "$APP" "$STAGE/$NAME.app"
 ln -s /Applications "$STAGE/Applications"
 
+# The window's own background: product name, an arrow between where the two
+# icons land, and the drag instruction in all three languages the app speaks.
+# `brand/dmg-background.tiff` carries a 1x and a 2x representation in one file,
+# which is the only way the Finder draws it sharp on a Retina display -- see
+# scripts/make-dmg-background.swift, which draws it. A leading dot keeps the
+# folder out of the window it is decorating.
+BACKGROUND="brand/dmg-background.tiff"
+if [ ! -f "$BACKGROUND" ]; then
+  echo "refusing: $BACKGROUND is missing; run scripts/make-dmg-background.swift" >&2
+  exit 1
+fi
+mkdir -p "$STAGE/.background"
+cp "$BACKGROUND" "$STAGE/.background/background.tiff"
+
 # A writable image first: the Finder cannot arrange icons inside a read-only
 # one, and the arrangement is the whole point of a drag-to-install window.
 SIZE=$(( $(du -sm "$STAGE" | cut -f1) + 40 ))
@@ -65,6 +79,18 @@ tell application "Finder"
     set opts to the icon view options of container window
     set arrangement of opts to not arranged
     set icon size of opts to 128
+    -- Addressed through the whole path expression rather than through the opts
+    -- variable: setting background picture on that variable is the incantation
+    -- every guide gives, and it fails on this macOS with -10006, because opts
+    -- holds a value here, not a reference to set a property on. Naming the
+    -- option in full works, confirmed by reading backgroundImageAlias back out
+    -- of the volume's own .DS_Store afterwards.
+    -- (No backticks anywhere in this heredoc: it is unquoted, so the shell
+    -- would run whatever they contained before AppleScript ever saw it.)
+    set background picture of the icon view options of container window to file ".background:background.tiff"
+    -- Labels under the icons rather than beside them, so the two names sit in
+    -- the gap the background leaves for them.
+    set label position of opts to bottom
     set position of item "$NAME.app" of container window to {150, 190}
     set position of item "Applications" of container window to {450, 190}
     close
