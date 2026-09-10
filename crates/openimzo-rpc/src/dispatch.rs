@@ -1,7 +1,7 @@
 //! Routing a request to a function, and the `apidoc` document sites read.
 
 use crate::error::{Result, RpcError};
-use crate::i18n::{Lang, Messages};
+use crate::i18n::{Lang, Messages, UiLang};
 use crate::model::{Request, Response};
 use crate::origin::{ApikeyService, Origin, OriginDecision};
 use crate::plugins::pki::Enrollment;
@@ -135,6 +135,14 @@ pub struct Ctx {
     pub config: DispatcherConfig,
     pub messages: Messages,
     pub lang: RwLock<Lang>,
+    /// The language the app's own chrome is in, which is NOT the same
+    /// question as `lang` above: that one is what a website is answered in
+    /// and has only the original's two values, while this one is what the
+    /// person reading the app sees and has three (see [`UiLang`]). Set from
+    /// the shell's settings; read only by the pages this project serves on
+    /// `127.0.0.1`, so that opening them lands in the same language the
+    /// menu bar is already speaking.
+    pub ui_lang: RwLock<UiLang>,
     pub sessions: Arc<Sessions>,
     pub discovery: Arc<Discovery>,
     pub ui: Arc<UiBroker>,
@@ -201,6 +209,10 @@ impl Ctx {
         *self.lang.read()
     }
 
+    pub fn ui_lang(&self) -> UiLang {
+        *self.ui_lang.read()
+    }
+
     pub fn t(&self, key: &str) -> String {
         self.messages.get(self.lang(), key).to_string()
     }
@@ -241,6 +253,7 @@ impl Dispatcher {
     ) -> Self {
         let ctx = Arc::new(Ctx {
             lang: RwLock::new(config.lang),
+            ui_lang: RwLock::new(UiLang::default()),
             config,
             messages: Messages::load(),
             sessions,
@@ -277,6 +290,10 @@ impl Dispatcher {
 
     pub fn set_lang(&self, lang: Lang) {
         *self.ctx.lang.write() = lang;
+    }
+
+    pub fn set_ui_lang(&self, lang: UiLang) {
+        *self.ctx.ui_lang.write() = lang;
     }
 
     pub fn lang(&self) -> Lang {

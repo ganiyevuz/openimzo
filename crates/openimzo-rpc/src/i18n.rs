@@ -31,6 +31,46 @@ impl Lang {
     }
 }
 
+/// The languages the app's own chrome is written in — its menu bar, its
+/// window, and the two pages this project serves on `127.0.0.1`.
+///
+/// Deliberately a different type from [`Lang`], which it sits next to so the
+/// difference is impossible to miss. `Lang` is a wire contract: it is what
+/// `app.change_ui_lang` accepts and what every reply a website reads is
+/// written in, and the original admits exactly `ru` and `uz` there — so
+/// widening it would change what every integrated site sees. `UiLang` is
+/// ours. It has English, because the person using the app and the websites
+/// it answers are not the same audience, and nothing a website reads is
+/// ever written in it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
+pub enum UiLang {
+    #[default]
+    Ru,
+    Uz,
+    En,
+}
+
+impl UiLang {
+    pub fn code(self) -> &'static str {
+        match self {
+            UiLang::Ru => "ru",
+            UiLang::Uz => "uz",
+            UiLang::En => "en",
+        }
+    }
+
+    /// The three codes the macOS shell's own `AppLanguage` spells. Anything
+    /// else is `None`, and the caller keeps whatever it already had.
+    pub fn from_code(code: &str) -> Option<Self> {
+        match code {
+            "ru" => Some(UiLang::Ru),
+            "uz" => Some(UiLang::Uz),
+            "en" => Some(UiLang::En),
+            _ => None,
+        }
+    }
+}
+
 /// One argument for a `%s` / `%d` placeholder.
 #[derive(Clone, Debug)]
 pub enum Arg {

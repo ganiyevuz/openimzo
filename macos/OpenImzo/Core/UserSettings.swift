@@ -68,10 +68,11 @@ enum UserSettings {
         set { UserDefaults.standard.set(newValue, forKey: hasCompletedFirstRunKey) }
     }
 
-    /// The app's own chrome language (`AppLanguage`) — same reasoning as `extraKeyFolders`: the
-    /// core's `Settings` has no matching field, since `openimzo_rpc::i18n::Lang` only knows about
-    /// its own two languages, not this app's three-way chrome choice (see `AppLanguage`'s own
-    /// doc comment). Defaults to Russian, matching the original's own default.
+    /// The app's own chrome language (`AppLanguage`). This is the authority on it: the core's
+    /// `Settings.uiLang` mirrors it so the pages served on `127.0.0.1` can follow it, but that
+    /// mirror is written from here, not read back — it has to be, because the chrome has a
+    /// language before the engine exists to be asked. `CoreEngine.refreshSettings()` reconciles
+    /// the two on launch. Defaults to Russian, matching the original's own default.
     static var appLanguage: AppLanguage {
         get {
             _ = migrateLegacyDefaultsOnce

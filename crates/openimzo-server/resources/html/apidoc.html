@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
-        <title>OpenImzo — API · {0}</title>
+        <title>OpenImzo — API · {{version}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="favicon.ico" sizes="any">
         <link rel="icon" href="icon.png" type="image/png">
@@ -233,27 +233,67 @@
                     max-height: none;
                 }
             }
+            .compat {
+                /* Deliberately OUTSIDE <main id="content">: the script below empties that
+                   element (`content.innerHTML = ''`) the moment the document loads, so
+                   anything placed inside it disappears before a reader ever sees it.
+                   Being outside means it also has to reproduce .layout's own centring
+                   by hand — same 1080px cap, same auto margins — or it sits visibly
+                   wider than everything under it. The width keeps a 16px gutter on a
+                   narrow screen, where .layout's children get theirs from their own
+                   padding and a bordered box would otherwise touch the edge. */
+                width: calc(100% - 32px);
+                max-width: 1080px;
+                margin: 22px auto 0;
+                background: var(--pill-bg);
+                border: 1px solid var(--border);
+                border-left: 3px solid var(--accent);
+                border-radius: 10px;
+                padding: 16px 20px;
+            }
+            .compat p {
+                margin: 0;
+            }
+            .compat code {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 0.9em;
+            }
+            .compat-note {
+                margin-top: 10px !important;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
         </style>
     </head>
-    <body>
+    <!-- The script below builds nodes of its own, so its four strings ride in on
+         data attributes rather than being interpolated into JavaScript: an attribute
+         value cannot end a string literal or a <script> block, whoever writes the
+         translation. They are read back through `document.body.dataset` in camelCase. -->
+    <body data-copy="{{copy}}" data-copied="{{copied}}" data-optional="{{optional}}" data-load-failed="{{load_failed}}">
         <header class="topbar">
-            <a href="http://e-imzo.uz/"><img src="e-imzo-logo.png" alt="E-IMZO"></a>
+            <img src="openimzo-logo.png" alt="" width="40" height="40" style="border-radius:9px">
             <div>
-                <h1>API-документация для разработчиков</h1>
-                <span class="version">{0}</span>
+                <h1>{{api_docs}}</h1>
+                <span class="version">{{version}}</span>
             </div>
         </header>
+        <div class="compat">
+            <p><strong>{{compat_lead}}</strong> {{compat_body}}</p>
+            <p class="compat-note">{{compat_note}}</p>
+        </div>
         <div class="layout">
-            <nav class="toc" aria-label="Contents">
-                <p class="toc-title">Содержание</p>
-                <div id="tocList">Загрузка…</div>
+            <nav class="toc" aria-label="{{toc_title}}">
+                <p class="toc-title">{{toc_title}}</p>
+                <div id="tocList">{{loading}}</div>
             </nav>
             <main id="content">
-                <p id="status">Загрузка документации…</p>
+                <p id="status">{{loading_doc}}</p>
             </main>
         </div>
         <script>
             (function () {
+                var T = document.body.dataset;
+
                 function el(tag, cls, text) {
                     var e = document.createElement(tag);
                     if (cls) e.className = cls;
@@ -288,13 +328,13 @@
                     var pre = el('pre', 'code-block');
                     pre.appendChild(code);
 
-                    var copyBtn = el('button', 'copy-btn', 'Копировать');
+                    var copyBtn = el('button', 'copy-btn', T.copy);
                     copyBtn.type = 'button';
                     copyBtn.addEventListener('click', function () {
                         var text = code.textContent;
                         var done = function () {
-                            copyBtn.textContent = 'Скопировано';
-                            setTimeout(function () { copyBtn.textContent = 'Копировать'; }, 1500);
+                            copyBtn.textContent = T.copied;
+                            setTimeout(function () { copyBtn.textContent = T.copy; }, 1500);
                         };
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(text).then(done, done);
@@ -346,7 +386,7 @@
                             if (func.arguments && func.arguments.length) {
                                 var argsList = el('dl', 'args');
                                 func.arguments.forEach(function (arg) {
-                                    argsList.appendChild(el('dt', null, arg.name + (arg.optional ? ' (необязательный)' : '')));
+                                    argsList.appendChild(el('dt', null, arg.name + (arg.optional ? ' (' + T.optional + ')' : '')));
                                     argsList.appendChild(el('dd', null, arg.description));
                                 });
                                 fsec.appendChild(argsList);
@@ -365,7 +405,7 @@
                 function fail(reason) {
                     var content = document.getElementById('content');
                     content.innerHTML = '';
-                    content.appendChild(el('p', 'error', 'Не удалось загрузить документацию: ' + reason));
+                    content.appendChild(el('p', 'error', T.loadFailed + ': ' + reason));
                 }
 
                 window.addEventListener('load', function () {

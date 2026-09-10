@@ -15,7 +15,7 @@ use openimzo_keys::{Discovery, DiscoveryConfig, KeyKind, Sessions};
 use openimzo_rpc::dispatch::{Dispatcher, DispatcherConfig};
 use openimzo_rpc::origin::{ApikeyConfig, ApikeyService, ApikeyStore};
 use openimzo_rpc::ui::UiBroker;
-use openimzo_rpc::Lang;
+use openimzo_rpc::{Lang, UiLang};
 use openimzo_server::{Server, ServerConfig, ServerEvent, ServerHandle};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -280,6 +280,13 @@ fn apply_settings(dispatcher: &Dispatcher, settings: &Settings) {
     // than guessed at.
     if let Some(lang) = Lang::from_code(&settings.lang) {
         dispatcher.set_lang(lang);
+    }
+    // The chrome language, which does have an "en" — it is what the two
+    // pages served on 127.0.0.1 are written in, and nothing a website reads
+    // is written in it. Same "leave it alone rather than guess" rule for a
+    // code this build does not know.
+    if let Some(ui_lang) = UiLang::from_code(&settings.ui_lang) {
+        dispatcher.set_ui_lang(ui_lang);
     }
 }
 

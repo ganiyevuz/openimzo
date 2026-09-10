@@ -38,13 +38,17 @@ fn binary(kind: &'static str, body: &'static [u8]) -> Response {
     ([(header::CONTENT_TYPE, kind)], body).into_response()
 }
 
+/// Both pages follow `ui_lang` — the language the app's own menu bar is in
+/// — and not `lang`, which is the language websites are answered in. They
+/// are different questions with different answers: `ui_lang` has an English
+/// the wire contract does not, and a person reading this page in English is
+/// not a reason to start answering websites differently.
 async fn index(State(state): State<AppState>) -> Response {
-    let ctx = state.dispatcher.ctx();
-    html(assets::index_html(&ctx.messages, ctx.lang()))
+    html(assets::index_html(state.dispatcher.ctx().ui_lang()))
 }
 
-async fn apidoc() -> Response {
-    html(assets::apidoc_html())
+async fn apidoc(State(state): State<AppState>) -> Response {
+    html(assets::apidoc_html(state.dispatcher.ctx().ui_lang()))
 }
 
 async fn client_js() -> Response {
@@ -80,7 +84,7 @@ pub fn router(state: AppState) -> Router {
         .route("/", get(index).options(preflight))
         .route("/apidoc.html", get(apidoc).options(preflight))
         .route("/e-imzo.js", get(client_js).options(preflight))
-        .route("/e-imzo-logo.png", get(|| async { binary("image/png", assets::LOGO_PNG) }).options(preflight))
+        .route("/openimzo-logo.png", get(|| async { binary("image/png", assets::LOGO_PNG) }).options(preflight))
         .route("/favicon.ico", get(|| async { binary("image/x-icon", assets::FAVICON_ICO) }).options(preflight))
         .route("/icon.png", get(|| async { binary("image/png", assets::ICON_PNG) }).options(preflight))
         .route("/service/cryptapi", get(ws::upgrade).options(preflight))

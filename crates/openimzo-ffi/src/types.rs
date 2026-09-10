@@ -81,7 +81,16 @@ pub struct Site {
 
 #[derive(Clone, Debug, uniffi::Record)]
 pub struct Settings {
+    /// What websites are answered in: `openimzo_rpc::i18n::Lang`'s own two
+    /// codes, `"ru"` or `"uz"`, and nothing else — this one is a wire
+    /// contract.
     pub lang: String,
+    /// What the person using the app reads: `openimzo_rpc::i18n::UiLang`'s
+    /// three codes, `"ru"`, `"uz"` or `"en"`. Separate from `lang` because
+    /// the app's chrome has an English the original never had, and giving
+    /// `lang` a third value would change what every integrated site sees.
+    /// The core reads it for the two pages it serves on `127.0.0.1`.
+    pub ui_lang: String,
     pub launch_at_login: bool,
     pub developer_mode: bool,
     /// Remember a password for six hours when the person ticks the box.

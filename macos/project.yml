@@ -30,11 +30,21 @@ targets:
           - "Info.plist"
       - path: Generated/openimzo.swift
         name: openimzo.swift
+      # A plain .icns in Resources rather than an asset catalogue: this app has one
+      # image asset, and a catalogue would add a compile step for it. Every size in the
+      # file is drawn at its own size rather than scaled from 1024, so 16pt and 32pt
+      # stay legible. Info.plist points at it with CFBundleIconFile.
+      - path: OpenImzo/Resources/AppIcon.icns
+        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: "OpenImzo"
         PRODUCT_BUNDLE_IDENTIFIER: io.github.ganiyevuz.openimzo
         INFOPLIST_FILE: OpenImzo/Info.plist
+        # The icon is a plain .icns in Resources rather than an asset catalogue: this app
+        # has exactly one image asset, and a catalogue would add a compile step and a build
+        # dependency for it. Every size in the file is drawn at its own size rather than
+        # scaled down from 1024, so the 16pt and 32pt versions stay legible.
         # YES (Xcode's own default for a project using a String Catalog): lets the build extract
         # every `LocalizedStringKey`/`String(localized:)` use so Xcode can cross-check it against
         # `Localizable.xcstrings` and flag a used-but-missing or catalogued-but-unused key. With

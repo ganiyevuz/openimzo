@@ -38,6 +38,12 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// — task 6's controller addendum is explicit that adding English there would change what a
     /// website sees, which this task must not do — so English chrome leaves the core on its own
     /// Russian default rather than being given a language it has no third option for.
+    ///
+    /// This is only half of what the core is told. `Settings.uiLang` gets `rawValue` unchanged,
+    /// English included: it is `openimzo_rpc::i18n::UiLang`, it exists precisely because the
+    /// person using the app and the websites it answers are not the same audience, and the core
+    /// reads it for the two pages it serves on `127.0.0.1`. Nothing a website reads is written
+    /// in it, which is what makes a third language there safe when a third `lang` would not be.
     var coreLangCode: String {
         self == .uz ? "uz" : "ru"
     }

@@ -6,6 +6,7 @@
 pub mod assets;
 pub mod config;
 pub mod http;
+pub mod pages;
 pub mod run;
 pub mod state;
 pub mod tls;

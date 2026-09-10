@@ -10,5 +10,5 @@ pub mod origin;
 pub mod plugins;
 pub mod ui;
 
-pub use i18n::Lang;
+pub use i18n::{Lang, UiLang};
 pub use model::{Request, Response};

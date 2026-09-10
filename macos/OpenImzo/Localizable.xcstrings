@@ -1123,6 +1123,28 @@
         }
       }
     },
+    "Version %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Версия %@"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versiya %@"
+          }
+        }
+      }
+    },
     "A native replacement for the original E-IMZO desktop client.": {
       "localizations": {
         "en": {
@@ -1145,46 +1167,178 @@
         }
       }
     },
-    "%@ is released under the MIT licence.": {
+    "%@ is released under the GNU General Public License, version 3 or later (GPL-3.0-or-later).": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ is released under the MIT licence."
+            "value": "%@ is released under the GNU General Public License, version 3 or later (GPL-3.0-or-later)."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ распространяется по лицензии MIT."
+            "value": "%@ распространяется по лицензии GNU General Public License версии 3 или новее (GPL-3.0-or-later)."
           }
         },
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ MIT litsenziyasi asosida tarqatiladi."
+            "value": "%@ GNU General Public License litsenziyasining 3-versiyasi yoki undan keyingi versiyasi (GPL-3.0-or-later) asosida tarqatiladi."
           }
         }
       }
     },
-    "It links a small number of open-source Rust libraries for cryptography, certificate handling, and networking, each under its own permissive licence.": {
+    "Anyone may use, study, modify and redistribute it, and a modified version they distribute must also be published under the same licence.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It links a small number of open-source Rust libraries for cryptography, certificate handling, and networking, each under its own permissive licence."
+            "value": "Anyone may use, study, modify and redistribute it, and a modified version they distribute must also be published under the same licence."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Она использует небольшое число открытых библиотек Rust для криптографии, работы с сертификатами и сети, каждая под собственной разрешительной лицензией."
+            "value": "Любой может использовать, изучать, изменять и распространять её, а изменённую версию при распространении необходимо публиковать под той же лицензией."
           }
         },
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "U kriptografiya, sertifikatlar bilan ishlash va tarmoq uchun bir nechta ochiq manbali Rust kutubxonalaridan foydalanadi, ularning har biri oʻz erkin litsenziyasiga ega."
+            "value": "Har kim undan foydalanishi, uni oʻrganishi, oʻzgartirishi va tarqatishi mumkin, tarqatilgan oʻzgartirilgan versiya ham xuddi shu litsenziya asosida chop etilishi shart."
+          }
+        }
+      }
+    },
+    "It links a small number of open-source Rust libraries for cryptography, certificate handling, and networking, each under its own open-source licence, listed in THIRD_PARTY_LICENSES.md.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It links a small number of open-source Rust libraries for cryptography, certificate handling, and networking, each under its own open-source licence, listed in THIRD_PARTY_LICENSES.md."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Она использует небольшое число открытых библиотек Rust для криптографии, работы с сертификатами и сети, каждая под собственной открытой лицензией; их перечень приведён в THIRD_PARTY_LICENSES.md."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "U kriptografiya, sertifikatlar bilan ishlash va tarmoq uchun bir nechta ochiq manbali Rust kutubxonalaridan foydalanadi, ularning har biri oʻz ochiq litsenziyasiga ega; roʻyxati THIRD_PARTY_LICENSES.md faylida keltirilgan."
+          }
+        }
+      }
+    },
+    "Links": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Links"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ссылки"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Havolalar"
+          }
+        }
+      }
+    },
+    "Developer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разработчик"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dasturchi"
+          }
+        }
+      }
+    },
+    "Project": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проект"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loyiha"
+          }
+        }
+      }
+    },
+    "Developer website, opens in your browser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer website, opens in your browser"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сайт разработчика, откроется в браузере"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dasturchi sayti, brauzerda ochiladi"
+          }
+        }
+      }
+    },
+    "Project on GitHub, opens in your browser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project on GitHub, opens in your browser"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проект на GitHub, откроется в браузере"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loyiha GitHubda, brauzerda ochiladi"
           }
         }
       }

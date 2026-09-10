@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleLocalizations</key>
@@ -20,10 +22,20 @@
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<!-- Dated versions (YYYY.MM.DD), not semantic ones. This is an app a person
+	     installs, not a library anyone links against: there is no API whose
+	     stability a major number could promise, so the only question a version
+	     has to answer here is "how old is the copy I am running", which a date
+	     answers exactly. Zero-padded so the string sorts the same way the
+	     integers compare, which is what lets a naive string comparison anywhere
+	     downstream still get the order right. A second release on one day takes
+	     a fourth component in CFBundleVersion only — CFBundleShortVersionString
+	     is documented as at most three integers, and it is the one shown to
+	     people. Set by hand at release time, and matched by the git tag. -->
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2026.09.11</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2026.09.11</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>

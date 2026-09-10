@@ -199,19 +199,23 @@ final class CoreEngine {
         await refreshSites()
     }
 
-    /// Reads `Settings` from the core, then reconciles `Settings.lang` against the chrome
-    /// language already chosen (`appLanguage`) if the two disagree. That disagreement is possible
-    /// exactly once: `setAppLanguage(_:)` itself skips telling the core when `settings` is still
-    /// `nil` (nothing to update yet), which happens if the person changes the chrome language in
-    /// the brief window between construction and this method's first call completing. Without
-    /// this, that one race would leave the core silently stuck on the old language until the
-    /// person changed it again — exactly the disagreement task 6's controller addendum says must
-    /// never happen.
+    /// Reads `Settings` from the core, then reconciles both of its language fields against the
+    /// chrome language already chosen (`appLanguage`) if they disagree. That disagreement is
+    /// possible exactly once: `setAppLanguage(_:)` itself skips telling the core when `settings`
+    /// is still `nil` (nothing to update yet), which happens if the person changes the chrome
+    /// language in the brief window between construction and this method's first call completing.
+    /// Without this, that one race would leave the core silently stuck on the old language until
+    /// the person changed it again — exactly the disagreement task 6's controller addendum says
+    /// must never happen. It also carries an existing `settings.json` forward: one written before
+    /// `uiLang` existed arrives with it defaulted from `lang`, and this is what corrects it from
+    /// `UserDefaults`, which is where the chrome language has always actually lived.
     func refreshSettings() async {
         guard let engine else { return }
         settings = await engine.settings()
-        if var current = settings, current.lang != appLanguage.coreLangCode {
+        if var current = settings,
+           current.lang != appLanguage.coreLangCode || current.uiLang != appLanguage.rawValue {
             current.lang = appLanguage.coreLangCode
+            current.uiLang = appLanguage.rawValue
             await updateSettings(current)
         }
     }
@@ -229,18 +233,27 @@ final class CoreEngine {
         }
     }
 
-    /// Changes the app's own chrome language and, per task 6's controller addendum, tells the
-    /// core too so the two never disagree about what "Uzbek" or "Russian" means: Uzbek maps to
-    /// the core's own `uz`, and both Russian and English map to `ru`, since the core has no
-    /// English and Russian is its (and the original's) own default — see `AppLanguage
-    /// .coreLangCode`. The chrome switches immediately regardless of the core, since it doesn't
-    /// depend on the engine at all; telling the core is skipped, not dropped, if `settings`
-    /// hasn't loaded yet — `refreshSettings()`'s own doc comment covers the catch-up.
+    /// Changes the app's own chrome language and tells the core both of the things it now wants
+    /// to know about it, which are two different questions:
+    ///
+    /// - `lang` is what a **website** is answered in. Uzbek maps to the core's own `uz`, and both
+    ///   Russian and English map to `ru`, since the wire contract has no English and Russian is
+    ///   its (and the original's) own default — see `AppLanguage.coreLangCode`. Per task 6's
+    ///   controller addendum, the two halves must never disagree about what "Uzbek" or "Russian"
+    ///   means.
+    /// - `uiLang` is what the **person** reads, and it does have English. The core uses it for
+    ///   the two pages it serves on `127.0.0.1`, so opening them lands in the language the menu
+    ///   bar is already speaking rather than in Russian regardless.
+    ///
+    /// The chrome switches immediately regardless of the core, since it doesn't depend on the
+    /// engine at all; telling the core is skipped, not dropped, if `settings` hasn't loaded yet
+    /// — `refreshSettings()`'s own doc comment covers the catch-up.
     func setAppLanguage(_ language: AppLanguage) async {
         appLanguage = language
         UserSettings.appLanguage = language
         guard var updated = settings else { return }
         updated.lang = language.coreLangCode
+        updated.uiLang = language.rawValue
         await updateSettings(updated)
     }
 

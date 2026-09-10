@@ -17,6 +17,16 @@ const FILE_NAME: &str = "settings.json";
 #[derive(Serialize, Deserialize)]
 struct SettingsFile {
     lang: String,
+    /// Absent from any `settings.json` written before the served pages
+    /// learned to follow the app's own language. `#[serde(default)]` rather
+    /// than a bare field so an older file still parses — without it every
+    /// other preference in it would be discarded as unreadable — and an
+    /// absent value falls back to `lang` below rather than to a hard-coded
+    /// default, since that is the closest thing such a file has to an
+    /// answer. The shell overwrites it from its own `UserDefaults` on the
+    /// first `refreshSettings()` anyway.
+    #[serde(default)]
+    ui_lang: Option<String>,
     launch_at_login: bool,
     developer_mode: bool,
     remember_passwords: bool,
@@ -28,6 +38,7 @@ impl From<&Settings> for SettingsFile {
     fn from(s: &Settings) -> Self {
         SettingsFile {
             lang: s.lang.clone(),
+            ui_lang: Some(s.ui_lang.clone()),
             launch_at_login: s.launch_at_login,
             developer_mode: s.developer_mode,
             remember_passwords: s.remember_passwords,
@@ -40,6 +51,7 @@ impl From<&Settings> for SettingsFile {
 impl From<SettingsFile> for Settings {
     fn from(f: SettingsFile) -> Self {
         Settings {
+            ui_lang: f.ui_lang.unwrap_or_else(|| f.lang.clone()),
             lang: f.lang,
             launch_at_login: f.launch_at_login,
             developer_mode: f.developer_mode,
@@ -54,10 +66,14 @@ impl From<SettingsFile> for Settings {
 /// and `ask_before_randseed` default to the behavior this workspace already
 /// had before either was configurable — remembering allowed, asking before
 /// seeding — so a first run changes nothing about how those two feel;
-/// `lang` matches `openimzo_rpc::Lang::default()` (`"ru"`).
+/// `lang` matches `openimzo_rpc::Lang::default()` (`"ru"`), and `ui_lang`
+/// `openimzo_rpc::UiLang::default()`, which is the same language for the
+/// same reason: the original defaults to Russian regardless of what the
+/// machine's own language is.
 fn default_settings() -> Settings {
     Settings {
         lang: "ru".to_string(),
+        ui_lang: "ru".to_string(),
         launch_at_login: false,
         developer_mode: false,
         remember_passwords: true,

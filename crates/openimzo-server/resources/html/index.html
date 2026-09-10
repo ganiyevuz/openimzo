@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
-        <title>OpenImzo — {0}</title>
+        <title>OpenImzo — {{version}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="favicon.ico" sizes="any">
         <link rel="icon" href="icon.png" type="image/png">
@@ -56,10 +56,17 @@
                 display: inline-block;
                 margin-bottom: 22px;
             }
-            .logo img {
-                display: block;
-                height: 34px;
-                width: auto;
+            .logo {
+                width: 72px;
+                height: 72px;
+                border-radius: 16px;
+            }
+            .links {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+                font-size: 0.92rem;
             }
             h1 {
                 font-size: 1.35rem;
@@ -101,13 +108,16 @@
     </head>
     <body>
         <div class="card">
-            <a class="logo" href="http://e-imzo.uz/"><img src="e-imzo-logo.png" alt="E-IMZO"></a>
+            <img class="logo" src="openimzo-logo.png" alt="" width="72" height="72">
             <h1>OpenImzo</h1>
-            <p class="tagline">an open-source, independent alternative to E-IMZO</p>
-            <div class="version">{0}</div>
-            <p class="status">{1}</p>
+            <p class="tagline">{{tagline}}</p>
+            <div class="version">{{version}}</div>
+            <p class="status">{{status}}</p>
             <hr>
-            <a href="apidoc.html">API-документация для разработчиков</a>
+            <div class="links">
+                <a href="apidoc.html">{{api_docs}}</a>
+                <a href="https://github.com/ganiyevuz/openimzo">{{source_code}}</a>
+            </div>
         </div>
     </body>
 </html>
