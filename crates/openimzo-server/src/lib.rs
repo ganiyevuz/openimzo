@@ -3,6 +3,7 @@
 //! Transport only: every request that carries a function call is handed
 //! straight to `openimzo_rpc`'s dispatcher, which owns all the policy.
 
+pub mod apidoc_text;
 pub mod assets;
 pub mod config;
 pub mod http;

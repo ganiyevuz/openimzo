@@ -57,6 +57,13 @@ jobs:
       - name: Crypto self-test
         run: cargo run --release -p openimzo-cli -- selftest
 
+      # A description with no entry in the translation table falls through and renders in
+      # Russian, which is right for an unknown string and indistinguishable from one somebody
+      # forgot. That is how the API reference came to be half translated in the first place, and
+      # it was found by a person reading the page, not by anything here.
+      - name: API reference translations
+        run: python3 scripts/check-apidoc-translations.py
+
   app:
     name: macOS app — clean build
     runs-on: macos-15

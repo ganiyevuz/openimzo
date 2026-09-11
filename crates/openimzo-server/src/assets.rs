@@ -92,6 +92,11 @@ pub fn apidoc_html(lang: UiLang) -> String {
             ("copied", t.copied),
             ("optional", t.optional),
             ("load_failed", t.load_failed),
+            // The plugin, function and argument text the page gets over the WebSocket is the
+            // original's, in the original's language, because that reply is a wire contract and
+            // websites receive it unchanged. The page swaps it for a translation on the way to
+            // the screen instead — see `apidoc_text`. Empty for Russian.
+            ("descriptions", &crate::apidoc_text::translations_json(lang)),
         ],
     )
 }

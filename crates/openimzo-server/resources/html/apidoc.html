@@ -294,6 +294,17 @@
             (function () {
                 var T = document.body.dataset;
 
+                // Plugin, function and argument text arrives over the WebSocket in the language
+                // the original wrote it in, because that reply is a wire contract this project
+                // does not alter. This table turns it into the language the app is set to, on
+                // the way to the screen. A string with no entry falls through unchanged, so a
+                // missing translation shows the original's own words rather than a blank label.
+                var DESCRIPTIONS = {{descriptions}};
+
+                function tr(text) {
+                    return (text && DESCRIPTIONS[text]) || text;
+                }
+
                 function el(tag, cls, text) {
                     var e = document.createElement(tag);
                     if (cls) e.className = cls;
@@ -313,7 +324,7 @@
                     if (func.arguments && func.arguments.length) {
                         raw(',\n  '); tok('prop', 'arguments'); raw(': [\n');
                         func.arguments.forEach(function (arg, i) {
-                            raw('    '); tok('comment', '// ' + arg.description); raw('\n    ');
+                            raw('    '); tok('comment', '// ' + tr(arg.description)); raw('\n    ');
                             tok('ident', arg.name);
                             raw(i < func.arguments.length - 1 ? ',\n' : '\n');
                         });
@@ -375,19 +386,19 @@
                         var section = el('section', 'plugin');
                         section.id = 'plugin-' + plugin.name;
                         section.appendChild(el('h2', null, plugin.name));
-                        section.appendChild(el('p', 'plugin-desc', plugin.description));
+                        section.appendChild(el('p', 'plugin-desc', tr(plugin.description)));
 
                         (plugin.functions || []).forEach(function (func) {
                             var fsec = el('article', 'func');
                             fsec.id = 'plugin-' + plugin.name + '-' + func.name;
                             fsec.appendChild(el('h3', 'func-name', func.name));
-                            fsec.appendChild(el('p', 'func-desc', func.description));
+                            fsec.appendChild(el('p', 'func-desc', tr(func.description)));
 
                             if (func.arguments && func.arguments.length) {
                                 var argsList = el('dl', 'args');
                                 func.arguments.forEach(function (arg) {
                                     argsList.appendChild(el('dt', null, arg.name + (arg.optional ? ' (' + T.optional + ')' : '')));
-                                    argsList.appendChild(el('dd', null, arg.description));
+                                    argsList.appendChild(el('dd', null, tr(arg.description)));
                                 });
                                 fsec.appendChild(argsList);
                             }
