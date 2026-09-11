@@ -46,6 +46,12 @@ jobs:
           # than a single detached commit.
           fetch-depth: 0
 
+      # The pin must always name a RELEASED Xcode, never a beta. This step failed on
+      # every tag until it did: .xcode-version named 27.0, which is a beta (build
+      # 27A5237l) that exists on the author's machine and on no GitHub runner. A
+      # reproducibility promise pinned to a beta is one nobody else can check, which
+      # makes it not a promise. Same rule for every platform this ships on, and the
+      # same reason rust-toolchain.toml names an exact stable release.
       - name: Select the pinned Xcode
         run: |
           set -euo pipefail
