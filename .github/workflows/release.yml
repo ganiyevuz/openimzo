@@ -135,7 +135,37 @@ jobs:
               exit 1
             fi
           done
-          gh release upload "${GITHUB_REF_NAME}" \
+
+          # A tag whose name carries a suffix after a hyphen -- v2026.10.01-rc1 -- is a
+          # pre-release and must never displace the stable one people download.
+          case "$GITHUB_REF_NAME" in
+            *-*) STABLE=false ;;
+            *)   STABLE=true  ;;
+          esac
+
+          # Create the release if the tag has none yet, so pushing a tag is the whole
+          # ceremony and nobody has to remember a manual step first.
+          if ! gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "OpenImzo ${GITHUB_REF_NAME#v}" \
+              --generate-notes \
+              --prerelease="$( [ "$STABLE" = true ] && echo false || echo true )"
+          fi
+
+          gh release upload "$GITHUB_REF_NAME" \
             dist/OpenImzo-unsigned-macos.zip \
             dist/SHA256SUMS \
             --repo "$GITHUB_REPOSITORY" --clobber
+
+          # Deleting a tag turns its release back into a draft, and a draft is invisible to
+          # the /releases/latest endpoint -- which is what the app's own update check asks.
+          # That happened twice while this repository was being set up, and each time the
+          # in-app check silently went back to reporting no release at all. Stating both
+          # flags on every run means a tag that has been moved comes back published rather
+          # than staying quietly drafted.
+          if [ "$STABLE" = true ]; then
+            gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          else
+            gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false --latest=false
+          fi
