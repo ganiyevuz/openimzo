@@ -26,6 +26,15 @@ enum UserSettings {
     private static let lastUpdateCheckKey = "lastUpdateCheck"
     private static let skippedUpdateVersionKey = "skippedUpdateVersion"
 
+    /// Whether names and identifiers are replaced with dots until revealed.
+    ///
+    /// `internal`, and the only preference here exposed as a key rather than a property: the two
+    /// views that use it bind through `@AppStorage`, which is what makes a change in Settings
+    /// redraw the Keys list immediately — a `static var` read would not, since nothing observes
+    /// it. The name lives here anyway, with every other preference name, because a literal typed
+    /// into two different views is how two spellings of one preference begin.
+    static let maskSensitiveDataKey = "maskSensitiveData"
+
     /// The bundle identifier this app shipped under before the OpenImzo rename
     /// (`macos/project.yml`, before this task). Read only by `migrateLegacyDefaults()`.
     private static let legacyBundleIdentifier = "uz.eimzo-renewed.app"

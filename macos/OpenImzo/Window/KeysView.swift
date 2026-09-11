@@ -1,6 +1,38 @@
 import AppKit
 import SwiftUI
 
+/// Replaces a value with dots while masking is on.
+///
+/// The mask is a fixed run, never the length of what it hides. A mask that grows and shrinks with
+/// its value leaks the length of a name and the number of digits in an identifier — and for a
+/// national identifier, whose format is public and whose length is fixed, length plus format is
+/// most of the way to knowing its shape. Eight dots for everything, always.
+enum SensitiveText {
+    static let mask = "••••••••"
+
+    static func render(_ value: String, hidden: Bool) -> String {
+        guard hidden, !value.isEmpty else { return value }
+        return mask
+    }
+}
+
+/// The eye beside a key: shows what this one row is hiding, without turning masking off
+/// everywhere. Reveal is per key and lives only in memory, so closing the window puts it back.
+private struct RevealButton: View {
+    let isHidden: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: isHidden ? "eye" : "eye.slash")
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(.secondary)
+        .accessibilityLabel(isHidden ? "Show this key's details" : "Hide this key's details")
+        .help(isHidden ? "Show this key's details" : "Hide this key's details")
+    }
+}
+
 /// How a key's validity reads at a glance.
 ///
 /// `unknown` is a real state and not a synonym for "fine": a locked PFX whose alias carries no
@@ -110,6 +142,12 @@ private struct KeyRow: View {
     let key: KeyEntry
     var coreEngine: CoreEngine
     @Binding var activeSheet: KeysView.ActiveSheet?
+    /// True when this row's name and identifier are dots right now.
+    let isHidden: Bool
+    let onToggleReveal: () -> Void
+    /// Whether masking is on at all. Without it the eye would sit on every row forever, offering
+    /// to reveal something already in plain sight.
+    let maskingEnabled: Bool
 
     private var presentation: KeyPresentation {
         KeyPresentation(key, unlocked: coreEngine.unlockedSummary(for: key))
@@ -142,15 +180,19 @@ private struct KeyRow: View {
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
                     }
-                    Text(verbatim: shown.displayName(fallback: key.name))
+                    Text(verbatim: SensitiveText.render(shown.displayName(fallback: key.name), hidden: isHidden))
                         .font(.headline)
+                    if maskingEnabled {
+                        RevealButton(isHidden: isHidden, action: onToggleReveal)
+                            .font(.caption)
+                    }
                 }
                 HStack(spacing: 8) {
                     Text(shown.identity.isOrganisation ? "Organisation" : "Individual")
                     if let identifier = shown.primaryIdentifier {
                         Text(verbatim: "·")
                         Text(identifier.label)
-                        Text(verbatim: identifier.value)
+                        Text(verbatim: SensitiveText.render(identifier.value, hidden: isHidden))
                     }
                 }
                 .font(.caption)
@@ -218,13 +260,28 @@ private struct DetailRow: View {
     let value: String
     /// A second, dimmer line under the value — the OID an identifier came from, say.
     var note: String?
+    /// Whether this particular field is one of the ones masking covers. The note is never
+    /// masked: an OID is a public constant, and hiding it would hide what the row means rather
+    /// than what it says.
+    var sensitive: Bool = false
+    var isHidden: Bool = false
 
     var body: some View {
         if !value.isEmpty {
             LabeledContent {
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(verbatim: value)
-                        .textSelection(.enabled)
+                    // Two branches rather than one `Text` with a conditional modifier:
+                    // `.textSelection(_:)` is generic over the selectability type, so
+                    // `cond ? .disabled : .enabled` is two different types in one expression and
+                    // does not compile. Selection is off while masked so the real value cannot
+                    // be copied out of a row that is showing dots.
+                    if sensitive && isHidden {
+                        Text(verbatim: SensitiveText.mask)
+                            .textSelection(.disabled)
+                    } else {
+                        Text(verbatim: value)
+                            .textSelection(.enabled)
+                    }
                     if let note, !note.isEmpty {
                         Text(verbatim: note)
                             .font(.caption2)
@@ -244,28 +301,49 @@ struct KeyDetailPanel: View {
     let key: KeyEntry
     var coreEngine: CoreEngine
     @Binding var activeSheet: KeysView.ActiveSheet?
+    let isHidden: Bool
+    let onToggleReveal: () -> Void
+    let maskingEnabled: Bool
 
     var body: some View {
         let shown = KeyPresentation(key, unlocked: coreEngine.unlockedSummary(for: key))
         Form {
+            if maskingEnabled {
+                Section {
+                    HStack {
+                        Label(
+                            isHidden ? "Details are hidden" : "Details are showing",
+                            systemImage: isHidden ? "eye.slash" : "eye"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        Spacer()
+                        Button(isHidden ? "Show" : "Hide", action: onToggleReveal)
+                    }
+                }
+            }
+
             Section("Identity") {
-                DetailRow(label: "Name", value: shown.identity.commonName)
-                DetailRow(label: "Surname", value: shown.identity.surname)
-                DetailRow(label: "Given name", value: shown.identity.givenName)
-                DetailRow(label: "Organisation", value: shown.identity.organisation)
+                DetailRow(label: "Name", value: shown.identity.commonName, sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Surname", value: shown.identity.surname, sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Given name", value: shown.identity.givenName, sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Organisation", value: shown.identity.organisation, sensitive: true, isHidden: isHidden)
+                // Position and country are not masked: a job title and a two-letter country
+                // identify nobody on their own, and leaving them visible keeps the panel
+                // readable enough to still be worth opening while masked.
                 DetailRow(label: "Position", value: shown.identity.position)
                 DetailRow(label: "Country", value: shown.identity.country)
             }
 
             Section("Identifiers") {
-                DetailRow(label: "PINFL", value: shown.identity.pinfl, note: "1.2.860.3.16.1.2")
-                DetailRow(label: "Tax number (person)", value: shown.identity.tinIndividual, note: "UID")
-                DetailRow(label: "Tax number (organisation)", value: shown.identity.tinOrganisation, note: "1.2.860.3.16.1.1")
+                DetailRow(label: "PINFL", value: shown.identity.pinfl, note: "1.2.860.3.16.1.2", sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Tax number (person)", value: shown.identity.tinIndividual, note: "UID", sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Tax number (organisation)", value: shown.identity.tinOrganisation, note: "1.2.860.3.16.1.1", sensitive: true, isHidden: isHidden)
                 // Labelled apart from the certificate's serial number below on purpose: they are
                 // different numbers, and a DN attribute called SERIALNUMBER shown as "serial
                 // number" beside a certificate is exactly how they get confused.
-                DetailRow(label: "Subject serial", value: shown.identity.aliasSerialNumber, note: "SERIALNUMBER")
-                DetailRow(label: "Certificate serial", value: shown.serialNumber)
+                DetailRow(label: "Subject serial", value: shown.identity.aliasSerialNumber, note: "SERIALNUMBER", sensitive: true, isHidden: isHidden)
+                DetailRow(label: "Certificate serial", value: shown.serialNumber, sensitive: true, isHidden: isHidden)
             }
 
             Section("Validity") {
@@ -289,14 +367,20 @@ struct KeyDetailPanel: View {
             Section("Cryptography") {
                 DetailRow(label: "Key algorithm", value: shown.publicKeyAlgName)
                 DetailRow(label: "Issuer", value: shown.issuerName)
-                DetailRow(label: "Subject", value: shown.subjectName)
+                // The whole subject DN, which contains the name and every identifier above.
+                // Masking the parts and leaving the string they came from in the clear would be
+                // a mask with a hole in it.
+                DetailRow(label: "Subject", value: shown.subjectName, sensitive: true, isHidden: isHidden)
             }
 
             Section("File") {
                 DetailRow(label: "Format", value: key.format)
-                DetailRow(label: "File name", value: key.name)
+                // The file name of an Uzbek key file is the identifier with an extension on it,
+                // and the path contains the file name. Both are masked for that reason, not
+                // because a path is private in general.
+                DetailRow(label: "File name", value: key.name, sensitive: true, isHidden: isHidden)
                 DetailRow(label: "Disk", value: key.disk)
-                DetailRow(label: "Full path", value: key.fullPath)
+                DetailRow(label: "Full path", value: key.fullPath, sensitive: true, isHidden: isHidden)
             }
 
             if shown.isLocked {
@@ -557,6 +641,11 @@ struct KeysView: View {
     var coreEngine: CoreEngine
 
     @Environment(\.locale) private var locale
+    @AppStorage(UserSettings.maskSensitiveDataKey) private var maskSensitiveData = false
+    /// Keys the person has chosen to show while masking is on, by file path. In memory only:
+    /// a reveal is meant to last as long as you are looking at it, not to quietly undo the
+    /// setting for good.
+    @State private var revealedKeys: Set<String> = []
     @State private var activeSheet: ActiveSheet?
     @State private var extraFolders = UserSettings.extraKeyFolders
     @State private var showingFolders = false
@@ -581,7 +670,14 @@ struct KeysView: View {
                 )
             } else {
                 List(coreEngine.keys, id: \.fullPath, selection: $selectedKeyPath) { key in
-                    KeyRow(key: key, coreEngine: coreEngine, activeSheet: $activeSheet)
+                    KeyRow(
+                        key: key,
+                        coreEngine: coreEngine,
+                        activeSheet: $activeSheet,
+                        isHidden: isHidden(key),
+                        onToggleReveal: { toggleReveal(key) },
+                        maskingEnabled: maskSensitiveData
+                    )
                 }
             }
         }
@@ -591,8 +687,15 @@ struct KeysView: View {
         // collapses, and remembers nothing a person has to undo.
         .inspector(isPresented: $showingDetails) {
             if let selectedKey {
-                KeyDetailPanel(key: selectedKey, coreEngine: coreEngine, activeSheet: $activeSheet)
-                    .inspectorColumnWidth(min: 260, ideal: 320, max: 420)
+                KeyDetailPanel(
+                    key: selectedKey,
+                    coreEngine: coreEngine,
+                    activeSheet: $activeSheet,
+                    isHidden: isHidden(selectedKey),
+                    onToggleReveal: { toggleReveal(selectedKey) },
+                    maskingEnabled: maskSensitiveData
+                )
+                .inspectorColumnWidth(min: 260, ideal: 320, max: 420)
             } else {
                 ContentUnavailableView(
                     "No Key Selected",
@@ -682,6 +785,22 @@ struct KeysView: View {
                 }
             }
             .environment(\.locale, locale)
+        }
+    }
+
+    /// Whether this key's name and identifiers are dots right now: masking is on and nobody has
+    /// asked for this particular one back.
+    private func isHidden(_ key: KeyEntry) -> Bool {
+        maskSensitiveData && !revealedKeys.contains(key.fullPath)
+    }
+
+    /// Reveals one key, or hides it again. Switching masking off entirely is Settings' job; this
+    /// is only ever about the row in front of you.
+    private func toggleReveal(_ key: KeyEntry) {
+        if revealedKeys.contains(key.fullPath) {
+            revealedKeys.remove(key.fullPath)
+        } else {
+            revealedKeys.insert(key.fullPath)
         }
     }
 

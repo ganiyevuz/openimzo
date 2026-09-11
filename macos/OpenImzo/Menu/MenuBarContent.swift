@@ -53,15 +53,24 @@ struct MenuBarIcon: View {
     }
 }
 
-/// What drops down when the menu bar item is clicked. "Open OpenImzo", the Keys submenu,
-/// Language, and "Quit" are wired; Developer Mode, Launch at Login, and Check for Updates are a
-/// later task's job (Sparkle updates: a later phase) and are shown visibly disabled rather than
-/// silently doing nothing, so nobody mistakes an unwired control for a broken one.
+/// What drops down when the menu bar item is clicked.
+///
+/// "Developer Mode" and "Launch at Login" are deliberately shown here read-only and disabled
+/// rather than removed: both are real settings a person can change, one screen away in Settings,
+/// and the menu is the fastest place to see what they are currently set to. A control that is
+/// visibly disabled says "not here"; a missing one says "not anywhere".
+///
+/// "Check for Updates" is wired. It was a placeholder for a Sparkle integration that this project
+/// then decided against — see `UpdateChecker`, which asks GitHub and never installs anything —
+/// and leaving it greyed out afterwards would have been claiming a feature was missing while it
+/// sat finished one menu away.
 struct MenuBarContent: View {
     var coreEngine: CoreEngine
+    var updateChecker: UpdateChecker
 
     @Environment(\.openWindow) private var openWindow
     @Environment(\.locale) private var locale
+    @AppStorage(UserSettings.maskSensitiveDataKey) private var maskSensitiveData = false
 
     var body: some View {
         Group {
@@ -75,7 +84,11 @@ struct MenuBarContent: View {
                         .disabled(true)
                 } else {
                     ForEach(coreEngine.keys, id: \.fullPath) { key in
-                        Button("\(key.name) — \(validityWord(for: key))") {
+                        // An Uzbek key file is named after the identifier inside it, so the file
+                        // name is exactly the thing Settings' masking switch exists to hide. The
+                        // validity word beside it stays, which is what makes the entry still
+                        // worth having while masked.
+                        Button("\(SensitiveText.render(key.name, hidden: maskSensitiveData)) — \(validityWord(for: key))") {
                             coreEngine.pendingKeySelection = key.fullPath
                             openMainWindow()
                         }
@@ -109,8 +122,15 @@ struct MenuBarContent: View {
             }
             Toggle("Launch at Login", isOn: .constant(false))
                 .disabled(true)
-            Button("Check for Updates…") {}
-                .disabled(true)
+            Button(updateChecker.isChecking ? "Checking…" : "Check for Updates…") {
+                Task {
+                    await updateChecker.checkNow()
+                    // Opening the window is the point: the result lands in Settings, and a
+                    // banner appears there and on every other section if there is an update.
+                    openMainWindow()
+                }
+            }
+            .disabled(updateChecker.isChecking)
 
             Divider()
 

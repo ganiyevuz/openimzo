@@ -78,6 +78,7 @@ struct SettingsView: View {
     var updateChecker: UpdateChecker
 
     @Environment(\.locale) private var locale
+    @AppStorage(UserSettings.maskSensitiveDataKey) private var maskSensitiveData = false
     @State private var isInstallingTrust = false
 
     var body: some View {
@@ -168,6 +169,7 @@ struct SettingsView: View {
                     Toggle("Keep Activity Log Across Launches", isOn: toggleBinding(settings, \.keepActivityLog))
                 }
 
+                privacySection
                 updatesSection
             } else {
                 Section {
@@ -182,6 +184,21 @@ struct SettingsView: View {
         // No `.navigationTitle` here: `MainWindow` sets the window's title bar itself, for all
         // five sections in one place — see its own doc comment for why.
         .task { await coreEngine.refreshSettings() }
+    }
+
+    /// One switch that hides every name and identifier in the Keys list behind dots.
+    ///
+    /// Off by default. The Keys list exists so a person can tell their keys apart without typing
+    /// a password, and defaulting to masked would undo the thing it is for. This is for the
+    /// moment that changes: screen sharing, a colleague at your shoulder, a screenshot for a bug
+    /// report. One switch, and an eye on each row for when you need just that one back.
+    @ViewBuilder private var privacySection: some View {
+        Section("Privacy") {
+            Toggle("Hide Names and Identifiers", isOn: $maskSensitiveData)
+            Text("Replaces names, national identifiers, serial numbers and file paths with dots. Each key has its own button to show it again for a moment.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
     }
 
     /// Update management: whether to check on its own, a button to check now, and what the last

@@ -55,7 +55,7 @@ struct OpenImzoApp: App {
         let locale = appDelegate.coreEngine.appLanguage.locale
 
         MenuBarExtra {
-            MenuBarContent(coreEngine: appDelegate.coreEngine)
+            MenuBarContent(coreEngine: appDelegate.coreEngine, updateChecker: appDelegate.updateChecker)
                 .environment(\.locale, locale)
         } label: {
             MenuBarIcon(coreEngine: appDelegate.coreEngine)

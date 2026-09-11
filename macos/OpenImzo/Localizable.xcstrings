@@ -4686,6 +4686,204 @@
           }
         }
       }
+    },
+    "Privacy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приватность"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maxfiylik"
+          }
+        }
+      }
+    },
+    "Hide Names and Identifiers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Names and Identifiers"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрывать имена и идентификаторы"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ism va identifikatorlarni yashirish"
+          }
+        }
+      }
+    },
+    "Replaces names, national identifiers, serial numbers and file paths with dots. Each key has its own button to show it again for a moment.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replaces names, national identifiers, serial numbers and file paths with dots. Each key has its own button to show it again for a moment."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заменяет имена, ПИНФЛ и ИНН, серийные номера и пути к файлам точками. У каждого ключа есть своя кнопка, чтобы показать его на время."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ismlar, JShShIR va STIR, seriya raqamlari va fayl yoʻllarini nuqtalar bilan almashtiradi. Har bir kalitning uni vaqtincha koʻrsatadigan oʻz tugmasi bor."
+          }
+        }
+      }
+    },
+    "Show this key's details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show this key's details"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать данные этого ключа"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kalit ma'lumotlarini koʻrsatish"
+          }
+        }
+      }
+    },
+    "Hide this key's details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide this key's details"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть данные этого ключа"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kalit ma'lumotlarini yashirish"
+          }
+        }
+      }
+    },
+    "Details are hidden": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details are hidden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные скрыты"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma'lumotlar yashirilgan"
+          }
+        }
+      }
+    },
+    "Details are showing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details are showing"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные показаны"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma'lumotlar koʻrsatilgan"
+          }
+        }
+      }
+    },
+    "Show": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koʻrsatish"
+          }
+        }
+      }
+    },
+    "Hide": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yashirish"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
