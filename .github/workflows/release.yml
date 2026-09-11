@@ -96,22 +96,46 @@ jobs:
       # workflow run, not by anything this repository's maintainers assert -- of which
       # workflow, commit, and repository produced this file. Verifiable independently
       # with `gh attestation verify`; see docs/verifying-a-release.md.
+      #
+      # Skipped, visibly, while this repository is private: GitHub refuses to persist an
+      # attestation for a user-owned private repository ("Feature not available for
+      # user-owned private repositories"), which failed this whole job once. Gated on
+      # the repository's own visibility rather than switched off or made
+      # continue-on-error, so it comes back by itself the day the repository goes
+      # public, and so a skipped step says plainly that it was skipped -- a provenance
+      # step that silently swallowed its own failure would be worse than none.
       - name: Attach build provenance
-        uses: actions/attest-build-provenance@v1
+        if: ${{ !github.event.repository.private }}
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: dist/OpenImzo-unsigned-macos.zip
 
+      # Uploaded with the GitHub CLI, which is preinstalled on the runner, rather than
+      # with a third-party release action. Same reason ci.yml runs no third-party
+      # action at all: this project asks people to trust what it builds, and the step
+      # that decides which bytes end up on the release page -- holding `contents:
+      # write` while it does -- is the last place to run code from an author nobody
+      # here has vetted.
+      #
+      # The signed convenience build (OpenImzo-signed-macos.zip) is not produced here:
+      # it needs the maintainer's actual Apple Developer ID and notarization
+      # credentials, which this workflow deliberately never has access to. It is built
+      # and attached to the same release by hand, from the exact unsigned .app this job
+      # already built and hashed -- see docs/verifying-a-release.md for what that means
+      # for comparing the two.
       - name: Attach to the GitHub release
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/OpenImzo-unsigned-macos.zip
-            dist/SHA256SUMS
-          # The signed convenience build (OpenImzo-signed-macos.zip) is not produced
-          # here: it needs the maintainer's actual Apple Developer ID and notarization
-          # credentials, which this workflow deliberately never has access to. It is
-          # built and attached to the same release by hand, from the exact unsigned
-          # .app this job already built and hashed -- see docs/verifying-a-release.md
-          # for what that means for comparing the two.
-          fail_on_unmatched_files: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for file in dist/OpenImzo-unsigned-macos.zip dist/SHA256SUMS; do
+            if [ ! -f "$file" ]; then
+              echo "::error::$file was not produced by the build" >&2
+              exit 1
+            fi
+          done
+          gh release upload "${GITHUB_REF_NAME}" \
+            dist/OpenImzo-unsigned-macos.zip \
+            dist/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" --clobber
