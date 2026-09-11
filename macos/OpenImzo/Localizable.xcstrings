@@ -194,7 +194,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sertifikat maʼlumotlarini oʻqish uchun oʻron kerak"
+            "value": "Sertifikat maʼlumotlarini oʻqish uchun parol kerak"
           }
         }
       }
@@ -282,7 +282,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronni oʻzgartirish…"
+            "value": "Parolni oʻzgartirish…"
           }
         }
       }
@@ -634,7 +634,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronni oʻzgartirish"
+            "value": "Parolni oʻzgartirish"
           }
         }
       }
@@ -656,7 +656,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Joriy oʻron"
+            "value": "Joriy parol"
           }
         }
       }
@@ -678,7 +678,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yangi oʻron"
+            "value": "Yangi parol"
           }
         }
       }
@@ -700,7 +700,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yangi oʻron (qayta kiriting)"
+            "value": "Yangi parol (qayta kiriting)"
           }
         }
       }
@@ -722,7 +722,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronlar mos emas"
+            "value": "Parollar mos emas"
           }
         }
       }
@@ -832,7 +832,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻron"
+            "value": "Parol"
           }
         }
       }
@@ -1030,7 +1030,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saytlarning %@'ga murojaatlari shu yerda koʻrinadi."
+            "value": "Saytlarning %@ʼga murojaatlari shu yerda koʻrinadi."
           }
         }
       }
@@ -1844,7 +1844,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronlar"
+            "value": "Parollar"
           }
         }
       }
@@ -1866,7 +1866,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronlarni 6 soatga saqlash"
+            "value": "Parollarni 6 soatga saqlash"
           }
         }
       }
@@ -1888,7 +1888,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saqlangan oʻronlarni hozir tozalash"
+            "value": "Saqlangan parollarni hozir tozalash"
           }
         }
       }
@@ -2042,7 +2042,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@'da muammo yuz berdi"
+            "value": "%@ʼda muammo yuz berdi"
           }
         }
       }
@@ -2064,7 +2064,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@'ni ochish"
+            "value": "%@ʼni ochish"
           }
         }
       }
@@ -2130,7 +2130,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@'ni yakunlash"
+            "value": "%@ʼni yakunlash"
           }
         }
       }
@@ -2504,7 +2504,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻronlar mos"
+            "value": "Parollar mos"
           }
         }
       }
@@ -2592,7 +2592,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻron (qayta kiriting)"
+            "value": "Parol (qayta kiriting)"
           }
         }
       }
@@ -2636,7 +2636,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻron soʻralmoqda"
+            "value": "Parol soʻralmoqda"
           }
         }
       }
@@ -2658,7 +2658,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kalit oʻroni notoʻgʻri yoki kalit fayli buzilgan"
+            "value": "Kalit paroli notoʻgʻri yoki kalit fayli buzilgan"
           }
         }
       }
@@ -2878,7 +2878,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oʻron qabul qilinmadi."
+            "value": "Parol qabul qilinmadi."
           }
         }
       }
@@ -2922,7 +2922,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@’ga xush kelibsiz"
+            "value": "%@ʼga xush kelibsiz"
           }
         }
       }
@@ -3120,7 +3120,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@’ni tizimga kirishda original kabi avtomatik ishga tushirish."
+            "value": "%@ʼni tizimga kirishda original kabi avtomatik ishga tushirish."
           }
         }
       }
@@ -3186,7 +3186,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu Mac’da avvalgi E-IMZO sozlamalari topilmadi — siz toza holatdan boshlaysiz."
+            "value": "Bu Macʼda avvalgi E-IMZO sozlamalari topilmadi — siz toza holatdan boshlaysiz."
           }
         }
       }
@@ -3208,7 +3208,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Original E-IMZO’dan sozlamalar topildi:"
+            "value": "Original E-IMZOʻdan sozlamalar topildi:"
           }
         }
       }
@@ -3340,7 +3340,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@’ning oʻz tinglovchisi hali ishga tushmagan — ehtimol, original hali ham ishlayapti. Oldingi qadamni yakunlab, qayta urinib koʻring."
+            "value": "%@ʼning oʻz tinglovchisi hali ishga tushmagan — ehtimol, original hali ham ishlayapti. Oldingi qadamni yakunlab, qayta urinib koʻring."
           }
         }
       }
@@ -3538,7 +3538,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kuniga bir marta GitHub'dan yangiroq versiya chiqqan-chiqmaganini soʻraydi. Siz haqingizda yoki kalitlaringiz haqida hech narsa yubormaydi — lekin, xuddi istalgan veb-sahifani ochgandek, GitHub bu kompyuterning manzilini biladi."
+            "value": "Kuniga bir marta GitHubʼdan yangiroq versiya chiqqan-chiqmaganini soʻraydi. Siz haqingizda yoki kalitlaringiz haqida hech narsa yubormaydi — lekin, xuddi istalgan veb-sahifani ochgandek, GitHub bu kompyuterning manzilini biladi."
           }
         }
       }
@@ -4132,7 +4132,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fayl haqida ma'lum boʻlgan hamma narsani koʻrish uchun roʻyxatdan kalitni tanlang."
+            "value": "Fayl haqida maʼlum boʻlgan hamma narsani koʻrish uchun roʻyxatdan kalitni tanlang."
           }
         }
       }
@@ -4770,7 +4770,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu kalit ma'lumotlarini koʻrsatish"
+            "value": "Bu kalit maʼlumotlarini koʻrsatish"
           }
         }
       }
@@ -4792,7 +4792,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu kalit ma'lumotlarini yashirish"
+            "value": "Bu kalit maʼlumotlarini yashirish"
           }
         }
       }
@@ -4814,7 +4814,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ma'lumotlar yashirilgan"
+            "value": "Maʼlumotlar yashirilgan"
           }
         }
       }
@@ -4836,7 +4836,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ma'lumotlar koʻrsatilgan"
+            "value": "Maʼlumotlar koʻrsatilgan"
           }
         }
       }
