@@ -213,13 +213,38 @@ echo "==> building OpenImzo.app (Release, unsigned)"
 # exactly as reproducible as the bytes underneath it and does not reopen the
 # problem this script exists to close. It's removed outright below anyway,
 # once stripping has invalidated it.
+# ARCHS and ONLY_ACTIVE_ARCH are spelled out because a plain `xcodebuild build` builds
+# for whatever machine is running it and says so nowhere. That is wrong here twice
+# over. It ships an artifact an Intel Mac cannot run -- the first CI-built release was
+# arm64-only, because GitHub's macos-15 runners are Apple Silicon. And it quietly makes
+# this whole script's promise host-dependent: the same commit built on an Intel Mac and
+# on an Apple Silicon Mac produces different bytes and therefore different hashes, with
+# nothing tampered with. Two parties comparing hashes would only ever agree by both
+# happening to be on the same architecture, which is not what "reproducible" means.
+#
+# scripts/build-core.sh already lipos the Rust core for both; this is the Swift half.
 xcodebuild -project "$STAGE/macos/OpenImzo.xcodeproj" -scheme OpenImzo -configuration Release \
   -derivedDataPath "$DERIVED" \
+  -destination 'generic/platform=macOS' \
+  ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO \
   CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
   build
 
 APP="$DERIVED/Build/Products/Release/OpenImzo.app"
 EXE="$APP/Contents/MacOS/OpenImzo"
+
+# Checked, not assumed. The flags above are only a request; this is what makes a
+# single-architecture artifact impossible to ship rather than merely unlikely -- the
+# same check scripts/make-dmg.sh makes before it will package anything, made here too
+# so the failure lands at the build rather than at the packaging.
+for arch in arm64 x86_64; do
+  if ! lipo -archs "$EXE" | tr ' ' '\n' | grep -qx "$arch"; then
+    echo "error: the built binary has no $arch slice (found: $(lipo -archs "$EXE"))." >&2
+    echo "       a release must run on both Apple Silicon and Intel." >&2
+    exit 1
+  fi
+done
+echo "==> universal binary: $(lipo -archs "$EXE")"
 
 echo "==> stripping the local (debug-map) symbol table"
 # Xcode strips this only for an *install*-style build (DEPLOYMENT_POSTPROCESSING),
